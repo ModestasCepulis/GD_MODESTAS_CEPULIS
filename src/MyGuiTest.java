@@ -15,22 +15,36 @@ public class MyGuiTest extends JFrame {
     JPanel aboutTheGameButtonPanel;
     JPanel exitGameButtonPanel;
     JPanel mainTextPanel;
+    JPanel choiceButtonPanel;
+    JPanel playerPanel;
+    JPanel exitConfirmationPanel;
 
     JLabel titleNameLabel;
+    JLabel hpLabel, hpLabelNumber, weaponLabel, weaponLabelName;
 
     JButton startButton;
     JButton optionsButton;
     JButton aboutTheGameButton;
     JButton exitGameButton;
+    JButton choice1, choice2, choice3, choice4;
+    JButton exitGameButtonYes, exitGameButtonNo;
 
     JTextArea mainTextArea;
 
     StartGameHandler startGameHdlr = new StartGameHandler();
     OptionsHandler OptionsHdlr = new OptionsHandler();
     AboutGameHandler aboutGameHdlr = new AboutGameHandler();
+    ChoiceHandler choiceHdlr = new ChoiceHandler();
+    ExitGameHandler exitGameHdlr = new ExitGameHandler();
+    ExitGameHandlerButtonYes exitGameButtonYesHdlr = new ExitGameHandlerButtonYes();
 
     Font titleFont = new Font("Times New Roman", Font.PLAIN, 80);
     Font buttonFont = new Font("Times New Roman", Font.PLAIN, 30);
+
+    int playerHP;
+
+    String weapon;
+    String position;
 
     public static void main(String[] args) {
 
@@ -92,6 +106,17 @@ public class MyGuiTest extends JFrame {
 
     }
 
+    //===================PLAYER SETUP=====================
+
+    public void playerSetup()
+    {
+        playerHP = 15;
+        weapon = "Knife";
+        weaponLabelName.setText(weapon);
+        hpLabelNumber.setText("" + playerHP);
+        townGate();
+    }
+
     //===================BUTTON METHODS===================
     public void startGameButton()
     {
@@ -107,6 +132,10 @@ public class MyGuiTest extends JFrame {
 
         //This adds an action listener to the button which allows the button to do somethnig
         startButton.addActionListener(startGameHdlr);
+        //Removes the line or circle whenever a button is pressed
+        //Code taken from:
+        //https://stackoverflow.com/questions/16157120/setfocuspainted-used-for-jbuttons
+        startButton.setFocusPainted(false);
     }
 
     public  void optionsButton()
@@ -118,6 +147,7 @@ public class MyGuiTest extends JFrame {
         optionsButton.setFont(buttonFont);
         optionsButton.setBorder(BorderFactory.createEmptyBorder());
         optionsButton.addActionListener(OptionsHdlr);
+        optionsButton.setFocusPainted(false);
     }
 
     public void aboutTheGameButton()
@@ -129,6 +159,7 @@ public class MyGuiTest extends JFrame {
         aboutTheGameButton.setFont(buttonFont);
         aboutTheGameButton.setBorder(BorderFactory.createEmptyBorder());
         aboutTheGameButton.addActionListener(aboutGameHdlr);
+        aboutTheGameButton.setFocusPainted(false);
     }
 
     public void exitGameButton()
@@ -139,6 +170,19 @@ public class MyGuiTest extends JFrame {
         exitGameButton.setForeground(Color.white);
         exitGameButton.setFont(buttonFont);
         exitGameButton.setBorder(BorderFactory.createEmptyBorder());
+        exitGameButton.setFocusPainted(false);
+        exitGameButton.addActionListener(exitGameHdlr);
+    }
+
+    public void exitGameButtonYes()
+    {
+        exitGameButtonYes = new JButton("Yes");
+        exitGameButtonYes.setBackground(Color.red);
+        exitGameButtonYes.setForeground(Color.white);
+        exitGameButtonYes.setFont(buttonFont);
+        exitGameButtonYes.setBorder(BorderFactory.createEmptyBorder());
+        exitGameButtonYes.setFocusPainted(false);
+        exitGameButtonYes.addActionListener(exitGameButtonYesHdlr);
     }
 
     //========================PANEL METHODS===================
@@ -170,18 +214,20 @@ public class MyGuiTest extends JFrame {
         exitGameButtonPanel.setBackground(Color.DARK_GRAY);
     }
 
+    //====================DIFFERENT SCENES==================
+
     public void afterStartButtonScene()
     {
         disableAllPanels();
 
         mainTextPanel = new JPanel();
         mainTextPanel.setBounds(100,100,1000,250);
-        mainTextPanel.setBackground(Color.blue);
+        mainTextPanel.setBackground(Color.darkGray);
         container.add(mainTextPanel);
 
         mainTextArea = new JTextArea();
-        mainTextArea.setBounds(100,100,600,250);
-        mainTextArea.setBackground(Color.blue);
+        mainTextArea.setBounds(100,100,1000,250);
+        mainTextArea.setBackground(Color.darkGray);
         mainTextArea.setForeground(Color.white);
         mainTextArea.setFont(buttonFont);
         //This automatically wraps the text to the next line
@@ -189,6 +235,79 @@ public class MyGuiTest extends JFrame {
         //https://stackoverflow.com/questions/7861724/is-there-a-word-wrap-property-for-jlabel
         mainTextArea.setLineWrap(true);
         mainTextPanel.add(mainTextArea);
+
+        choiceButtonPanel = new JPanel();
+        choiceButtonPanel.setBounds(350,350,500,150);
+        choiceButtonPanel.setBackground(Color.darkGray);
+        //new GridLayout allows to change the layout of the buttons
+        //code reference taken from:
+        //https://docs.oracle.com/javase/7/docs/api/java/awt/GridLayout.html
+        choiceButtonPanel.setLayout(new GridLayout(4,1  ));
+        container.add(choiceButtonPanel);
+
+        choice1 = new JButton("Choice 1");
+        choice1.setBackground(Color.darkGray);
+        choice1.setForeground(Color.white);
+        choice1.setFont(buttonFont);
+        choiceButtonPanel.add(choice1);
+        choice1.setFocusPainted(false);
+        choice1.addActionListener(choiceHdlr);
+        choice1.setActionCommand("c1");
+
+        choice2 = new JButton("Choice 2");
+        choice2.setBackground(Color.darkGray);
+        choice2.setForeground(Color.white);
+        choice2.setFont(buttonFont);
+        choiceButtonPanel.add(choice2);
+        choice2.setFocusPainted(false);
+        choice2.addActionListener(choiceHdlr);
+        choice2.setActionCommand("c2");
+
+        choice3 = new JButton("Choice 3");
+        choice3.setBackground(Color.darkGray);
+        choice3.setForeground(Color.white);
+        choice3.setFont(buttonFont);
+        choiceButtonPanel.add(choice3);
+        choice3.setFocusPainted(false);
+        choice3.addActionListener(choiceHdlr);
+        choice3.setActionCommand("c3");
+
+        choice4 = new JButton("Choice 4");
+        choice4.setBackground(Color.darkGray);
+        choice4.setForeground(Color.white);
+        choice4.setFont(buttonFont);
+        choiceButtonPanel.add(choice4);
+        choice4.setFocusPainted(false);
+        choice4.addActionListener(choiceHdlr);
+        choice4.setActionCommand("c4");
+
+        playerPanel = new JPanel();
+        playerPanel.setBounds(100,15,1000,50);
+        playerPanel.setBackground(Color.blue);
+        playerPanel.setLayout(new GridLayout(1,4));
+        container.add(playerPanel);
+
+        hpLabel = new JLabel("HP: ");
+        hpLabel.setFont(buttonFont);
+        hpLabel.setForeground(Color.WHITE);
+        playerPanel.add(hpLabel);
+
+        hpLabelNumber = new JLabel();
+        hpLabelNumber.setFont(buttonFont);
+        hpLabelNumber.setForeground(Color.white);
+        playerPanel.add(hpLabelNumber);
+
+        weaponLabel = new JLabel("Weapon: ");
+        weaponLabel.setFont(buttonFont);
+        weaponLabel.setForeground(Color.white);
+        playerPanel.add(weaponLabel);
+
+        weaponLabelName = new JLabel();
+        weaponLabelName.setFont(buttonFont);
+        weaponLabelName.setForeground(Color.white);
+        playerPanel.add(weaponLabelName);
+
+        playerSetup();
     }
 
     public void afterAboutGameButtonScene()
@@ -227,7 +346,54 @@ public class MyGuiTest extends JFrame {
         mainTextPanel.add(mainTextArea);
     }
 
+    public void afterExitButtonScene()
+    {
+        disableAllPanels();
 
+        mainTextPanel = new JPanel();
+        mainTextPanel.setBounds(100,100,1000,250);
+        mainTextPanel.setBackground(Color.blue);
+        container.add(mainTextPanel);
+
+        mainTextArea = new JTextArea();
+        mainTextArea.setBounds(100,100,600,250);
+        mainTextArea.setBackground(Color.blue);
+        mainTextArea.setForeground(Color.white);
+        mainTextArea.setFont(buttonFont);
+        mainTextArea.setLineWrap(true);
+        mainTextPanel.add(mainTextArea);
+
+        mainTextArea.setText("Are you sure you want to exit the game?");
+
+        exitConfirmationPanel = new JPanel();
+        exitConfirmationPanel.setBounds(100,50,1000,800);
+        exitConfirmationPanel.setBackground(Color.red);
+        container.add(exitConfirmationPanel);
+
+
+
+    }
+
+    //=================GAME SCENES====================
+    public void townGate()
+    {
+        position = "townGate";
+        mainTextArea.setText("You are at the gate of the town, you can see 2 guards standing beside the gate, what do you do?");
+        choice1.setText("Do nothing");
+        choice2.setText("Say Hi");
+        choice3.setText("What?");
+        choice4.setText("asmrklamsr");
+    }
+
+    public void talkGuard()
+    {
+        position = "talkGuard";
+        mainTextArea.setText("Guard: whatsup");
+        choice1.setText("AAAAAAAA");
+        choice2.setText("~BBBBBBBBB");
+        choice3.setText("CCCCCCCC");
+        choice4.setText("DDDDDDD");
+    }
 
     public void testNewJFrameWindow()
     {
@@ -274,6 +440,52 @@ public class MyGuiTest extends JFrame {
 
         }
     }
+
+    public class ExitGameHandler implements ActionListener
+    {
+        public void actionPerformed(ActionEvent event)
+        {
+            afterExitButtonScene();
+        }
+    }
+
+    public class ExitGameHandlerButtonYes implements ActionListener
+    {
+        public void actionPerformed(ActionEvent event) {System.exit(0);}
+    }
+
+    public class ChoiceHandler implements ActionListener
+    {
+        public void actionPerformed(ActionEvent event)
+        {
+            //This takes the named reference from the buttons
+            String yourChoice = event.getActionCommand();
+
+            switch(position)
+            {
+                case "townGate":
+                    switch(yourChoice)
+                    {
+                        case "c1": talkGuard(); break;
+                        case "c2": break;
+                        case "c3": break;
+                        case "c4": break;
+                    }
+                    break;
+                case "talkGuard":
+                    switch (yourChoice)
+                    {
+                        case "c1": townGate(); break;
+                        case "c2": break;
+                        case "c3": break;
+                        case "c4": break;
+                    }
+            }
+
+        }
+    }
+
+    //================This disables all of the active panels===============
 
     public void disableAllPanels()
     {
