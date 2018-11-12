@@ -2,32 +2,21 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.security.Key;
 
-public class MyGuiTest extends JFrame {
-
-    JFrame window;
+public class MyGuiTest extends JFrame implements KeyListener {
 
     Container container;
 
-    JPanel titleNamePanel;
-    JPanel startButtonPanel;
-    JPanel optionsButtonPanel;
-    JPanel aboutTheGameButtonPanel;
-    JPanel exitGameButtonPanel;
-    JPanel mainTextPanel;
-    JPanel choiceButtonPanel;
-    JPanel playerPanel;
-    JPanel exitConfirmationPanel;
+    JPanel titleNamePanel, startButtonPanel, optionsButtonPanel,aboutTheGameButtonPanel,
+    exitGameButtonPanel, mainTextPanel, choiceButtonPanel, playerPanel, exitConfirmationPanelYes, exitConfirmationPanelNo;
 
-    JLabel titleNameLabel;
-    JLabel hpLabel, hpLabelNumber, weaponLabel, weaponLabelName;
+    JLabel titleNameLabel, hpLabel, hpLabelNumber, weaponLabel, weaponLabelName;
 
-    JButton startButton;
-    JButton optionsButton;
-    JButton aboutTheGameButton;
-    JButton exitGameButton;
-    JButton choice1, choice2, choice3, choice4;
-    JButton exitGameButtonYes, exitGameButtonNo;
+    JButton startButton, optionsButton, aboutTheGameButton, exitGameButton,
+            choice1, choice2, choice3, choice4, exitGameButtonYes, exitGameButtonNo;
 
     JTextArea mainTextArea;
 
@@ -37,23 +26,57 @@ public class MyGuiTest extends JFrame {
     ChoiceHandler choiceHdlr = new ChoiceHandler();
     ExitGameHandler exitGameHdlr = new ExitGameHandler();
     ExitGameHandlerButtonYes exitGameButtonYesHdlr = new ExitGameHandlerButtonYes();
+    ExitGameHandlerButtonNo exitGameButtonNoHdlr = new ExitGameHandlerButtonNo();
 
     Font titleFont = new Font("Times New Roman", Font.PLAIN, 80);
     Font buttonFont = new Font("Times New Roman", Font.PLAIN, 30);
 
     int playerHP;
 
-    String weapon;
-    String position;
+    String weapon, position;
+
+    JTextField keyText = new JTextField(80);
 
     public static void main(String[] args) {
 
         new MyGuiTest();
     }
 
+    public void keyTyped (KeyEvent e)
+    {
+
+    }
+
+    //This is what happens when a button is pressed
+    public void keyPressed (KeyEvent e)
+    {
+        int keyCode = e.getKeyCode();
+        //=======================INVENTORY=====================
+        //This method calls the inventory method if they 'I' key is pressed on the keyboard.
+        if(keyCode == KeyEvent.VK_I)
+        {
+            playerInventory();
+        }
+        if(keyCode == KeyEvent.VK_M)
+        {
+            gameMap();
+        }
+    }
+
+    public void keyReleased (KeyEvent txt)
+    {
+
+    }
+
     public MyGuiTest()
 
     {
+        //This adds the keylistener to the guy.
+        //KeyListener taken from:
+        //https://www.youtube.com/watch?v=PbmQrkwR9Ko
+        keyText.addKeyListener(this);
+        add(keyText);
+
         setSize(1200, 800);
         //This sets the JFrame to be always in the middle regardless of the screen size
         //Code taken from:
@@ -84,6 +107,8 @@ public class MyGuiTest extends JFrame {
         optionsButton();
         aboutTheGameButton();
         exitGameButton();
+        exitGameButtonYes();
+        exitGameButtonNo();
 
         //This adds the labels and buttons to he panels
         titleNamePanel.add(titleNameLabel);
@@ -103,7 +128,6 @@ public class MyGuiTest extends JFrame {
         //Sets the JFrame to visible.
         setVisible(true);
 
-
     }
 
     //===================PLAYER SETUP=====================
@@ -115,6 +139,32 @@ public class MyGuiTest extends JFrame {
         weaponLabelName.setText(weapon);
         hpLabelNumber.setText("" + playerHP);
         townGate();
+    }
+
+    //===================INVENTORY SETUP==================
+
+    public void playerInventory()
+    {
+        JFrame inventory = new JFrame();
+        inventory.setSize(1200,800);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        inventory.getContentPane().setBackground(Color.DARK_GRAY);
+        inventory.setLayout(null);
+        container = getContentPane();
+        inventory.setVisible(true);
+
+    }
+
+    public void gameMap()
+    {
+        JFrame map = new JFrame();
+        map.setSize(1200,800);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        map.getContentPane().setBackground(Color.DARK_GRAY);
+        map.setLayout(null);
+        container = getContentPane();
+        map.setVisible(true);
+
     }
 
     //===================BUTTON METHODS===================
@@ -183,6 +233,17 @@ public class MyGuiTest extends JFrame {
         exitGameButtonYes.setBorder(BorderFactory.createEmptyBorder());
         exitGameButtonYes.setFocusPainted(false);
         exitGameButtonYes.addActionListener(exitGameButtonYesHdlr);
+    }
+
+    public void exitGameButtonNo()
+    {
+        exitGameButtonNo = new JButton("No");
+        exitGameButtonNo.setBackground(Color.red);
+        exitGameButtonNo.setForeground(Color.white);
+        exitGameButtonNo.setFont(buttonFont);
+        exitGameButtonNo.setBorder(BorderFactory.createEmptyBorder());
+        exitGameButtonNo.setFocusPainted(false);
+        exitGameButtonNo.addActionListener(exitGameButtonNoHdlr);
     }
 
     //========================PANEL METHODS===================
@@ -351,7 +412,7 @@ public class MyGuiTest extends JFrame {
         disableAllPanels();
 
         mainTextPanel = new JPanel();
-        mainTextPanel.setBounds(100,100,1000,250);
+        mainTextPanel.setBounds(100,100,1200,250);
         mainTextPanel.setBackground(Color.blue);
         container.add(mainTextPanel);
 
@@ -365,10 +426,21 @@ public class MyGuiTest extends JFrame {
 
         mainTextArea.setText("Are you sure you want to exit the game?");
 
-        exitConfirmationPanel = new JPanel();
-        exitConfirmationPanel.setBounds(100,50,1000,800);
-        exitConfirmationPanel.setBackground(Color.red);
-        container.add(exitConfirmationPanel);
+        exitConfirmationPanelYes = new JPanel();
+        exitConfirmationPanelYes.setBounds(100,350,500,200);
+        exitConfirmationPanelYes.setFont(buttonFont);
+        exitConfirmationPanelYes.setBackground(Color.green);
+        exitConfirmationPanelYes.add(exitGameButtonYes);
+
+        exitConfirmationPanelNo = new JPanel();
+        exitConfirmationPanelNo.setBounds(600,350,500,200);
+        exitConfirmationPanelNo.setFont(buttonFont);
+        exitConfirmationPanelNo.setBackground(Color.orange);
+        exitConfirmationPanelNo.add(exitGameButtonNo);
+
+
+        container.add(exitConfirmationPanelYes);
+        container.add(exitConfirmationPanelNo);
 
 
 
@@ -393,23 +465,6 @@ public class MyGuiTest extends JFrame {
         choice2.setText("~BBBBBBBBB");
         choice3.setText("CCCCCCCC");
         choice4.setText("DDDDDDD");
-    }
-
-    public void testNewJFrameWindow()
-    {
-        JFrame window2 = new JFrame();
-        window2.setSize(1200, 800);
-        //This sets the JFrame to be always in the middle regardless of the screen size
-        //Code taken from:
-        // https://stackoverflow.com/questions/2442599/how-to-set-jframe-to-appear-centered-regardless-of-monitor-resolution
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        window2.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
-        window2.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        window2.getContentPane().setBackground(Color.DARK_GRAY);
-        window2.setLayout(null);
-        container = getContentPane();
-        window2.setVisible(true);
-        setVisible(false);
     }
 
     //==================BUTTON EVENT HANDLERS===============
@@ -454,6 +509,11 @@ public class MyGuiTest extends JFrame {
         public void actionPerformed(ActionEvent event) {System.exit(0);}
     }
 
+    public class ExitGameHandlerButtonNo implements ActionListener
+    {
+        public void actionPerformed(ActionEvent event) {new MyGuiTest();}
+    }
+
     public class ChoiceHandler implements ActionListener
     {
         public void actionPerformed(ActionEvent event)
@@ -495,6 +555,7 @@ public class MyGuiTest extends JFrame {
         aboutTheGameButtonPanel.setVisible(false);
         exitGameButtonPanel.setVisible(false);
     }
+
 }
 
 //
