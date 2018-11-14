@@ -35,6 +35,7 @@ public class MyGuiTest extends JFrame implements KeyListener {
     changeTextColourHandler textColourHdrl = new changeTextColourHandler();
     changeTextFontHandler textFontHdrl = new changeTextFontHandler();
     changeBackgroundColourHandler backgroundColourHdrl = new changeBackgroundColourHandler();
+    goBackHandler goBackHdlr = new goBackHandler();
 
     Font titleFont = new Font("Times New Roman", Font.PLAIN, 80);
     Font mainFont = new Font("Times New Roman", Font.PLAIN, 30);
@@ -454,6 +455,23 @@ public class MyGuiTest extends JFrame implements KeyListener {
         container.add(changeTextColourPanel);
         container.add(changeBackgroundColourPanel);
 
+        JButton goBackButton = new JButton();
+
+
+        JPanel goBackPanel = new JPanel();
+        goBackPanel.setBackground(Color.darkGray);
+        goBackPanel.setBounds(50,500,1000,150);
+
+        goBackButton = new JButton("Back to Menu");
+        goBackButton.setBackground(Color.black);
+        goBackButton.setForeground(Color.white);
+        goBackButton.setFont(mainFont);
+        goBackButton.setFocusPainted(false);
+        goBackButton.addActionListener(goBackHdlr);
+
+        goBackPanel.add(goBackButton);
+        container.add(goBackPanel);
+
 
     }
 
@@ -712,6 +730,14 @@ public class MyGuiTest extends JFrame implements KeyListener {
         {
 
             fontTypeCount++;
+        }
+    }
+
+    public class goBackHandler implements ActionListener
+    {
+        public void actionPerformed(ActionEvent event)
+        {
+
         }
     }
 
