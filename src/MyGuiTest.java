@@ -15,15 +15,15 @@ public class MyGuiTest extends JFrame implements KeyListener {
 
     JPanel titleNamePanel, startButtonPanel, optionsButtonPanel, aboutTheGameButtonPanel,
             exitGameButtonPanel, mainTextPanel, choiceButtonPanel, playerPanel, exitConfirmationPanelYes, exitConfirmationPanelNo,
-            changeTextColourPanel, changeBackgroundColourPanel;
+            changeTextColourPanel, changeBackgroundColourPanel, goBackPanel, ContinueButtonPanel, belowTextPanel;
 
     JLabel titleNameLabel, hpLabel, hpLabelNumber, weaponLabel, weaponLabelName;
 
     JButton startButton, optionsButton, aboutTheGameButton, exitGameButton,
             choice1, choice2, choice3, choice4, exitGameButtonYes, exitGameButtonNo, continueButton,
-            changeTextColourButton, changeBackgroundColourButton;
+            changeTextColourButton, changeBackgroundColourButton, goBackButton;
 
-    JTextArea mainTextArea;
+    JTextArea mainTextArea, belowTextArea;
 
     StartGameHandler startGameHdlr = new StartGameHandler();
     OptionsHandler OptionsHdlr = new OptionsHandler();
@@ -33,14 +33,15 @@ public class MyGuiTest extends JFrame implements KeyListener {
     ExitGameHandlerButtonYes exitGameButtonYesHdlr = new ExitGameHandlerButtonYes();
     ExitGameHandlerButtonNo exitGameButtonNoHdlr = new ExitGameHandlerButtonNo();
     changeTextColourHandler textColourHdrl = new changeTextColourHandler();
-    changeTextFontHandler textFontHdrl = new changeTextFontHandler();
     changeBackgroundColourHandler backgroundColourHdrl = new changeBackgroundColourHandler();
     goBackHandler goBackHdlr = new goBackHandler();
+    goBackHandlerAboutGame goBackHdrlAboutGame = new goBackHandlerAboutGame();
 
     Font titleFont = new Font("Times New Roman", Font.PLAIN, 80);
     Font mainFont = new Font("Times New Roman", Font.PLAIN, 30);
     Font mainTextUsedForNarrative = new Font("Comic Sans MS", Font.PLAIN, 28);
     Font optionsFont = new Font("Arial Black", Font.PLAIN, 30);
+    Font exitFont = new Font("Arial", Font.PLAIN, 45);
 
     int playerHP;
     int textColourCount = 1, backgroundColourCount = 1, fontTypeCount=1;
@@ -93,7 +94,7 @@ public class MyGuiTest extends JFrame implements KeyListener {
 
         titleNamePanel = new JPanel();
         titleNamePanel.setBounds(100, 100, 1000, 150);
-        titleNamePanel.setBackground(Color.blue);
+        titleNamePanel.setBackground(Color.darkGray);
 
         titleNameLabel = new JLabel("Begin your adventure");
         titleNameLabel.setForeground(Color.WHITE);
@@ -174,7 +175,7 @@ public class MyGuiTest extends JFrame implements KeyListener {
     public void startGameButton() {
         //===================START THE GAME BUTTON===================
         startButton = new JButton("Start the game");
-        startButton.setBackground(Color.BLUE);
+        startButton.setBackground(Color.darkGray);
         startButton.setForeground(Color.white);
         startButton.setFont(mainFont);
         //This creates a button with an empty border.
@@ -193,7 +194,7 @@ public class MyGuiTest extends JFrame implements KeyListener {
     public void optionsButton() {
         //===================OPTIONS BUTTON===================
         optionsButton = new JButton("Options");
-        optionsButton.setBackground(Color.BLUE);
+        optionsButton.setBackground(Color.darkGray);
         optionsButton.setForeground(Color.white);
         optionsButton.setFont(mainFont);
         optionsButton.setBorder(BorderFactory.createEmptyBorder());
@@ -204,7 +205,7 @@ public class MyGuiTest extends JFrame implements KeyListener {
     public void aboutTheGameButton() {
         //===================ABOUT THE GAME BUTTON===================
         aboutTheGameButton = new JButton("About the game");
-        aboutTheGameButton.setBackground(Color.BLUE);
+        aboutTheGameButton.setBackground(Color.darkGray);
         aboutTheGameButton.setForeground(Color.white);
         aboutTheGameButton.setFont(mainFont);
         aboutTheGameButton.setBorder(BorderFactory.createEmptyBorder());
@@ -215,7 +216,7 @@ public class MyGuiTest extends JFrame implements KeyListener {
     public void exitGameButton() {
         //===================EXIT THE GAME BUTTON===================
         exitGameButton = new JButton("Exit");
-        exitGameButton.setBackground(Color.BLUE);
+        exitGameButton.setBackground(Color.darkGray);
         exitGameButton.setForeground(Color.white);
         exitGameButton.setFont(mainFont);
         exitGameButton.setBorder(BorderFactory.createEmptyBorder());
@@ -225,9 +226,9 @@ public class MyGuiTest extends JFrame implements KeyListener {
 
     public void exitGameButtonYes() {
         exitGameButtonYes = new JButton("Yes");
-        exitGameButtonYes.setBackground(Color.red);
+        exitGameButtonYes.setBackground(Color.darkGray);
         exitGameButtonYes.setForeground(Color.white);
-        exitGameButtonYes.setFont(mainFont);
+        exitGameButtonYes.setFont(exitFont);
         exitGameButtonYes.setBorder(BorderFactory.createEmptyBorder());
         exitGameButtonYes.setFocusPainted(false);
         exitGameButtonYes.addActionListener(exitGameButtonYesHdlr);
@@ -235,9 +236,9 @@ public class MyGuiTest extends JFrame implements KeyListener {
 
     public void exitGameButtonNo() {
         exitGameButtonNo = new JButton("No");
-        exitGameButtonNo.setBackground(Color.red);
+        exitGameButtonNo.setBackground(Color.darkGray);
         exitGameButtonNo.setForeground(Color.white);
-        exitGameButtonNo.setFont(mainFont);
+        exitGameButtonNo.setFont(exitFont);
         exitGameButtonNo.setBorder(BorderFactory.createEmptyBorder());
         exitGameButtonNo.setFocusPainted(false);
         exitGameButtonNo.addActionListener(exitGameButtonNoHdlr);
@@ -245,7 +246,7 @@ public class MyGuiTest extends JFrame implements KeyListener {
 
     public void continueButton() {
         continueButton = new JButton("Continue");
-        continueButton.setBackground(Color.red);
+        continueButton.setBackground(Color.black);
         continueButton.setForeground(Color.white);
         continueButton.setFont(mainFont);
         continueButton.setBorder(BorderFactory.createEmptyBorder());
@@ -311,7 +312,7 @@ public class MyGuiTest extends JFrame implements KeyListener {
         mainTextArea = new JTextArea();
         mainTextArea.setBounds(100, 100, 1000, 250);
         mainTextArea.setBackground(Color.darkGray);
-        mainTextArea.setForeground(Color.white);
+        container.setForeground(Color.white);
         mainTextArea.setFont(mainFont);
         //This automatically wraps the text to the next line
         //Code taken from:
@@ -408,17 +409,18 @@ public class MyGuiTest extends JFrame implements KeyListener {
         mainTextPanel();
         mainTextArea();
         mainTextPanel.setBounds(70, 150, 1000, 290);
-        mainTextPanel.setBackground(Color.blue);
+        mainTextPanel.setBackground(Color.darkGray);
 
         mainTextArea.setFont(mainTextUsedForNarrative);
         mainTextArea.setText("It seems that it was a long time ago when you felt like this... " +
                 "\n\n\tBut is it a good feeling? You might not know... at least for now. \n\n\n\n\t\tYou open your eyes.");
+        mainTextArea.setForeground(Color.white);
 
-        choiceButtonPanel = new JPanel();
-        choiceButtonPanel.setBounds(470, 480, 200, 50);
-        choiceButtonPanel.setBackground(Color.red);
-        choiceButtonPanel.add(continueButton);
-        container.add(choiceButtonPanel);
+        ContinueButtonPanel = new JPanel();
+        ContinueButtonPanel.setBounds(470, 480, 200, 50);
+        ContinueButtonPanel.setBackground(Color.black);
+        ContinueButtonPanel.add(continueButton);
+        container.add( ContinueButtonPanel);
 
 
     }
@@ -427,6 +429,54 @@ public class MyGuiTest extends JFrame implements KeyListener {
         disableAllPanels();
         mainTextPanel();
         mainTextArea();
+
+        mainTextArea.setText("What is this game about?");
+        mainTextArea.setFont(exitFont);
+        mainTextArea.setBackground(Color.darkGray);
+        mainTextArea.setForeground(Color.white);
+        mainTextPanel.setBounds(100,100,1000,100);
+        mainTextPanel.setBackground(Color.darkGray);
+
+        belowTextArea = new JTextArea();
+        belowTextArea.setBounds(100, 50, 1000, 150);
+        belowTextArea.setBackground(Color.darkGray);
+        container.setForeground(Color.white);
+        belowTextArea.setFont(mainFont);
+        //This automatically wraps the text to the next line
+        //Code taken from:
+        //https://stackoverflow.com/questions/7861724/is-there-a-word-wrap-property-for-jlabel
+        belowTextArea.setLineWrap(true);
+        belowTextArea.setText("It is a text based game that challenges you to make the right decisions to survive in a harsh environment." +
+                              "\nOn your way, you have to defend yourself against different enemies, complete various quests and collect items or weapons.");
+        belowTextArea.setFont(mainFont);
+        belowTextArea.setBackground(Color.darkGray);
+        belowTextArea.setForeground(Color.white);
+
+        belowTextPanel = new JPanel();
+        belowTextPanel.setBounds(100, 250, 1000, 250);
+        belowTextPanel.setBackground(Color.darkGray);
+        belowTextPanel.add(belowTextArea);
+        container.add(belowTextPanel);
+
+        goBackButton = new JButton();
+
+
+        goBackPanel = new JPanel();
+        goBackPanel.setBackground(Color.black);
+        goBackPanel.setBounds(425,520,300,50);
+
+        goBackButton = new JButton("Back to Menu");
+        goBackButton.setBorder(BorderFactory.createEmptyBorder());
+        goBackButton.setBackground(Color.black);
+        goBackButton.setForeground(Color.white);
+        goBackButton.setFont(mainFont);
+        goBackButton.setFocusPainted(false);
+        goBackButton.addActionListener(goBackHdrlAboutGame);
+
+        goBackPanel.add(goBackButton);
+        container.add(goBackPanel);
+
+
     }
 
     public void afterOptionsButtonScene() {
@@ -435,34 +485,37 @@ public class MyGuiTest extends JFrame implements KeyListener {
         mainTextArea();
 
 
-        mainTextPanel.setBounds(100, 100, 520, 450);
+        mainTextPanel.setBounds(100, 100, 520, 350);
         mainTextArea.setFont(optionsFont);
         mainTextArea.setText("\tOptions\n\n\n\tChange text Colour\n\n\n\tChange background color");
+        mainTextArea.setForeground(Color.white);
         mainTextPanel.setBackground(Color.darkGray);
+        mainTextPanel.setForeground(Color.WHITE);
 
         changeTextColourPanel = new JPanel();
         changeTextColourPanel.setBounds(700, 240, 150, 50);
         changeTextColourPanel.setFont(mainFont);
-        changeTextColourPanel.setBackground(Color.darkGray);
+        changeTextColourPanel.setBackground(Color.black);
         changeTextColourPanel.add(changeTextColourButton);
 
         changeBackgroundColourPanel = new JPanel();
         changeBackgroundColourPanel.setBounds(700, 350, 150, 50);
         changeBackgroundColourPanel.setFont(mainFont);
-        changeBackgroundColourPanel.setBackground(Color.darkGray);
+        changeBackgroundColourPanel.setBackground(Color.black);
         changeBackgroundColourPanel.add(changeBackgroundColourButton);
 
         container.add(changeTextColourPanel);
         container.add(changeBackgroundColourPanel);
 
-        JButton goBackButton = new JButton();
 
+        goBackButton = new JButton();
 
-        JPanel goBackPanel = new JPanel();
-        goBackPanel.setBackground(Color.darkGray);
-        goBackPanel.setBounds(50,500,1000,150);
+        goBackPanel = new JPanel();
+        goBackPanel.setBackground(Color.black);
+        goBackPanel.setBounds(425,500,300,50);
 
         goBackButton = new JButton("Back to Menu");
+        goBackButton.setBorder(BorderFactory.createEmptyBorder());
         goBackButton.setBackground(Color.black);
         goBackButton.setForeground(Color.white);
         goBackButton.setFont(mainFont);
@@ -481,17 +534,21 @@ public class MyGuiTest extends JFrame implements KeyListener {
         mainTextArea();
 
         mainTextArea.setText("Are you sure you want to exit the game?");
+        mainTextArea.setFont(exitFont);
+        mainTextArea.setBackground(Color.darkGray);
+        mainTextArea.setForeground(Color.white);
+        mainTextPanel.setBackground(Color.darkGray);
 
         exitConfirmationPanelYes = new JPanel();
-        exitConfirmationPanelYes.setBounds(100, 350, 500, 200);
-        exitConfirmationPanelYes.setFont(mainFont);
-        exitConfirmationPanelYes.setBackground(Color.green);
+        exitConfirmationPanelYes.setBounds(300, 370, 150, 80);
+        exitConfirmationPanelYes.setFont(titleFont);
+        exitConfirmationPanelYes.setBackground(Color.darkGray);
         exitConfirmationPanelYes.add(exitGameButtonYes);
 
         exitConfirmationPanelNo = new JPanel();
-        exitConfirmationPanelNo.setBounds(600, 350, 500, 200);
-        exitConfirmationPanelNo.setFont(mainFont);
-        exitConfirmationPanelNo.setBackground(Color.orange);
+        exitConfirmationPanelNo.setBounds(700, 370, 150, 80);
+        exitConfirmationPanelNo.setFont(titleFont);
+        exitConfirmationPanelNo.setBackground(Color.darkGray);
         exitConfirmationPanelNo.add(exitGameButtonNo);
 
 
@@ -500,7 +557,8 @@ public class MyGuiTest extends JFrame implements KeyListener {
 
     }
 
-    public void mainMenuGUI()
+
+    public void mainMenuGUIChangedColors()
     {
         //this sets that the screen size cannot be changed.
         setResizable(false);
@@ -515,17 +573,17 @@ public class MyGuiTest extends JFrame implements KeyListener {
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation(dim.width / 2 - getSize().width / 2, dim.height / 2 - getSize().height / 2);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        getContentPane().setBackground(Color.DARK_GRAY);
         setLayout(null);
         container = getContentPane();
 
         titleNamePanel = new JPanel();
         titleNamePanel.setBounds(100, 100, 1000, 150);
-        titleNamePanel.setBackground(Color.blue);
+        titleNamePanel.setBackground(Color.darkGray);
+        titleNamePanel.setForeground(Color.white);
 
         titleNameLabel = new JLabel("Begin your adventure");
-        titleNameLabel.setForeground(Color.WHITE);
         titleNameLabel.setFont(titleFont);
+        titleNameLabel.setForeground(Color.white);
 
         //===========CALLS PANEL METHODS============
         startButtonPanel();
@@ -587,14 +645,25 @@ public class MyGuiTest extends JFrame implements KeyListener {
     public void textColourCounter() {
         if (textColourCount == 1) {
             mainTextArea.setForeground(Color.white);
+            mainTextPanel.setForeground(Color.white);
+            titleNameLabel.setForeground(Color.WHITE);
         } else if (textColourCount == 2) {
             mainTextArea.setForeground(Color.orange);
+            mainTextPanel.setForeground(Color.orange);
+            titleNameLabel.setForeground(Color.orange);
+            container.setForeground(Color.orange);
         } else if (textColourCount == 3) {
             mainTextArea.setForeground(Color.pink);
+            mainTextPanel.setForeground(Color.pink);
+            titleNameLabel.setForeground(Color.pink);
         } else if (textColourCount == 4) {
             mainTextArea.setForeground(Color.green);
+            mainTextPanel.setForeground(Color.green);
+            titleNameLabel.setForeground(Color.green);
         } else if (textColourCount == 5) {
             mainTextArea.setForeground(Color.cyan);
+            mainTextPanel.setForeground(Color.cyan);
+            titleNameLabel.setForeground(Color.cyan);
         } else {
             textColourCount = 0;
         }
@@ -606,30 +675,35 @@ public class MyGuiTest extends JFrame implements KeyListener {
             mainTextArea.setBackground(Color.darkGray);
             container.setBackground(Color.darkGray);
             mainTextPanel.setBackground(Color.darkGray);
+            titleNamePanel.setBackground(Color.darkGray);
         }
         else if (backgroundColourCount == 2)
         {
             mainTextArea.setBackground(Color.orange);
             container.setBackground(Color.orange);
             mainTextPanel.setBackground(Color.orange);
+            titleNamePanel.setBackground(Color.orange);
         }
         else if (backgroundColourCount == 3)
         {
             mainTextArea.setBackground(Color.pink);
             container.setBackground(Color.pink);
             mainTextPanel.setBackground(Color.pink);
+            titleNamePanel.setBackground(Color.pink);
         }
         else if (backgroundColourCount == 4)
         {
             mainTextArea.setBackground(Color.green);
             container.setBackground(Color.green);
             mainTextPanel.setBackground(Color.green);
+            titleNamePanel.setBackground(Color.green);
         }
         else if (backgroundColourCount == 5)
         {
             mainTextArea.setBackground(Color.cyan);
             container.setBackground(Color.cyan);
             mainTextPanel.setBackground(Color.cyan);
+            titleNamePanel.setBackground(Color.cyan);
         }
         else
         {
@@ -690,7 +764,7 @@ public class MyGuiTest extends JFrame implements KeyListener {
             mainTextPanel.setVisible(false);
             mainTextArea.setVisible(false);
 
-            mainMenuGUI();
+            mainMenuGUIChangedColors();
 
 
         }
@@ -737,6 +811,31 @@ public class MyGuiTest extends JFrame implements KeyListener {
     {
         public void actionPerformed(ActionEvent event)
         {
+            mainTextArea.setVisible(false);
+            mainTextPanel.setVisible(false);
+            changeTextColourPanel.setVisible(false);
+            changeBackgroundColourPanel.setVisible(false);
+            goBackButton.setVisible(false);
+            goBackPanel.setVisible(false);
+
+            mainMenuGUIChangedColors();
+
+
+
+        }
+    }
+
+    public class goBackHandlerAboutGame implements ActionListener
+    {
+        public void actionPerformed(ActionEvent event)
+        {
+            mainTextArea.setVisible(false);
+            mainTextPanel.setVisible(false);
+            belowTextPanel.setVisible(false);
+            goBackButton.setVisible(false);
+            goBackPanel.setVisible(false);
+
+            mainMenuGUIChangedColors();
 
         }
     }
@@ -771,6 +870,7 @@ public class MyGuiTest extends JFrame implements KeyListener {
 
         }
     }
+
 
     //================This disables all of the active panels===============
 
