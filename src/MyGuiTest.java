@@ -36,6 +36,7 @@ public class MyGuiTest extends JFrame implements KeyListener {
     changeBackgroundColourHandler backgroundColourHdrl = new changeBackgroundColourHandler();
     goBackHandler goBackHdlr = new goBackHandler();
     goBackHandlerAboutGame goBackHdrlAboutGame = new goBackHandlerAboutGame();
+    continueButtonHandler continueButtonHdrl = new continueButtonHandler();
 
     Font titleFont = new Font("Times New Roman", Font.PLAIN, 80);
     Font mainFont = new Font("Times New Roman", Font.PLAIN, 30);
@@ -251,6 +252,7 @@ public class MyGuiTest extends JFrame implements KeyListener {
         continueButton.setFont(mainFont);
         continueButton.setBorder(BorderFactory.createEmptyBorder());
         continueButton.setFocusPainted(false);
+        continueButton.addActionListener(continueButtonHdrl);
         //exitGameButtonNo.addActionListener(exitGameButtonNoHdlr);
     }
 
@@ -408,6 +410,8 @@ public class MyGuiTest extends JFrame implements KeyListener {
         disableAllPanels();
         mainTextPanel();
         mainTextArea();
+
+        
         mainTextPanel.setBounds(70, 150, 1000, 290);
         mainTextPanel.setBackground(Color.darkGray);
 
@@ -415,6 +419,7 @@ public class MyGuiTest extends JFrame implements KeyListener {
         mainTextArea.setText("It seems that it was a long time ago when you felt like this... " +
                 "\n\n\tBut is it a good feeling? You might not know... at least for now. \n\n\n\n\t\tYou open your eyes.");
         mainTextArea.setForeground(Color.white);
+        container.add(mainTextPanel);
 
         ContinueButtonPanel = new JPanel();
         ContinueButtonPanel.setBounds(470, 480, 200, 50);
@@ -554,6 +559,17 @@ public class MyGuiTest extends JFrame implements KeyListener {
 
         container.add(exitConfirmationPanelYes);
         container.add(exitConfirmationPanelNo);
+
+    }
+
+    public void afterFirstSceneContinue()
+    {
+        mainTextPanel();
+        mainTextArea();
+
+        mainTextArea.setVisible(false);
+        mainTextPanel.setVisible(false);
+        ContinueButtonPanel.setVisible(false);
 
     }
 
@@ -712,6 +728,8 @@ public class MyGuiTest extends JFrame implements KeyListener {
     }
 
 
+
+
     //==================BUTTON EVENT HANDLERS===============
 
     public class StartGameHandler implements ActionListener
@@ -772,7 +790,8 @@ public class MyGuiTest extends JFrame implements KeyListener {
 
     public class continueButtonHandler implements ActionListener
     {
-        public void actionPerformed(ActionEvent event) {}
+        public void actionPerformed(ActionEvent event)
+        {afterFirstSceneContinue();}
     }
 
 
@@ -780,11 +799,8 @@ public class MyGuiTest extends JFrame implements KeyListener {
     {
         public void actionPerformed(ActionEvent event)
         {
-
             textColourCount++;
             textColourCounter();
-
-
         }
     }
 
@@ -794,7 +810,6 @@ public class MyGuiTest extends JFrame implements KeyListener {
         {
             backgroundColourCount++;
             backgroundColourCounter();
-
         }
     }
 
