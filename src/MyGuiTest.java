@@ -10,7 +10,10 @@ import java.net.URL;
 import java.security.Key;
 import java.util.Random;
 
-public class MyGuiTest extends JFrame implements KeyListener {
+public class MyGuiTest extends JFrame{
+
+
+    static Player thePlayer;
 
     Container container;
 
@@ -48,36 +51,19 @@ public class MyGuiTest extends JFrame implements KeyListener {
     int playerHP;
     int textColourCount = 1, backgroundColourCount = 1, fontTypeCount=1;
 
-    String weapon, position;
+    String position;
 
     JTextField keyText = new JTextField(80);
+
+    boolean candleEquipped = false;
 
 
     public static void main(String[] args) {
 
+        thePlayer = new Player();
         new MyGuiTest();
     }
 
-    public void keyTyped(KeyEvent e) {
-
-    }
-
-    //This is what happens when a button is pressed
-    public void keyPressed(KeyEvent e) {
-        int keyCode = e.getKeyCode();
-        //=======================INVENTORY=====================
-        //This method calls the inventory method if they 'I' key is pressed on the keyboard.
-        if (keyCode == KeyEvent.VK_I) {
-            playerInventory();
-        }
-        if (keyCode == KeyEvent.VK_M) {
-            gameMap();
-        }
-    }
-
-    public void keyReleased(KeyEvent txt) {
-
-    }
 
     public MyGuiTest() {
         //this sets that the screen size cannot be changed.
@@ -142,35 +128,13 @@ public class MyGuiTest extends JFrame implements KeyListener {
     //===================PLAYER SETUP=====================
 
     public void playerSetup() {
-        playerHP = 25;
-        weapon = "Fists";
-        weaponLabelName.setText(weapon);
+        playerHP = thePlayer.getPlayerHP(); //gets the player hp from the 'Player' class.
+
+        thePlayer.getPlayerItem(); //default player item
+
+        weaponLabelName.setText(thePlayer.getPlayerItem());
         hpLabelNumber.setText("" + playerHP);
         townGate();
-    }
-
-    //===================INVENTORY SETUP==================
-
-    public void playerInventory() {
-        JFrame inventory = new JFrame();
-        inventory.setSize(1200, 800);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        inventory.getContentPane().setBackground(Color.DARK_GRAY);
-        inventory.setLayout(null);
-        container = getContentPane();
-        inventory.setVisible(true);
-
-    }
-
-    public void gameMap() {
-        JFrame map = new JFrame();
-        map.setSize(1200, 800);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        map.getContentPane().setBackground(Color.DARK_GRAY);
-        map.setLayout(null);
-        container = getContentPane();
-        map.setVisible(true);
-
     }
 
     //===================BUTTON METHODS===================
@@ -332,6 +296,9 @@ public class MyGuiTest extends JFrame implements KeyListener {
         mainTextPanel();
         mainTextArea();
 
+        thePlayer.setPlayerHP(25);
+        thePlayer.setPlayerItem("Fists");
+
         mainTextArea.setForeground(Color.white);
         mainTextPanel.setBackground(Color.RED);
         mainTextPanel.setBounds(100,100,1000,200);
@@ -397,7 +364,7 @@ public class MyGuiTest extends JFrame implements KeyListener {
         hpLabelNumber.setForeground(Color.white);
         playerPanel.add(hpLabelNumber);
 
-        weaponLabel = new JLabel("Weapon: ");
+        weaponLabel = new JLabel("Item: ");
         weaponLabel.setFont(mainFont);
         weaponLabel.setForeground(Color.white);
         playerPanel.add(weaponLabel);
@@ -664,11 +631,28 @@ public class MyGuiTest extends JFrame implements KeyListener {
     public void goToTheCandle()
     {
         position = "goToTheCandleScene";
+
         mainTextArea.setText("You move closer to the candle. You can see that the candle is really old it was made by hand from natural bee wax" +
                              " It seems that the candle is about to burn out... What do you do?");
         choice1.setText("Pick up the candle");
         choice2.setText("Go to the wall");
         choice3.setText("Go back to your previous position");
+        choice4.setText("Extinguish the fire");
+    }
+
+    public void pickUpTheCandle()
+    {
+        thePlayer.setPlayerItem("Candle");
+        thePlayer.setPlayerHP(2);
+        candleEquipped = true;
+        position = "pickUpTheCandle";
+
+        System.out.print("nannaa?" + thePlayer.getPlayerItem());
+
+        mainTextArea.setText("You picked up the candle. Now you can move the source of light around you, it helps to see things more clearly.");
+        choice1.setText("Go to the wall");
+        choice2.setText("Go back to the previous position");
+        choice3.setText("------");
         choice4.setText("------");
     }
 
@@ -887,6 +871,24 @@ public class MyGuiTest extends JFrame implements KeyListener {
                         case "c3": break;
                         case "c4": break;
                     }
+                    break;
+                case "goToTheCandleScene":
+                    switch (yourChoice)
+                    {
+                        case "c1": goToTheCandle(); break;
+                        case "c2": break;
+                        case "c3": break;
+                        case "c4": break;
+                    }
+                case "pickUpTheCandle":
+                    switch (yourChoice)
+                    {
+                        case "c1": pickUpTheCandle();break;
+                        case "c2": break;
+                        case "c3": break;
+                        case "c4": break;
+                    }
+
             }
 
         }
