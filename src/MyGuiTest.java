@@ -142,8 +142,8 @@ public class MyGuiTest extends JFrame implements KeyListener {
     //===================PLAYER SETUP=====================
 
     public void playerSetup() {
-        playerHP = 15;
-        weapon = "Knife";
+        playerHP = 25;
+        weapon = "Fists";
         weaponLabelName.setText(weapon);
         hpLabelNumber.setText("" + playerHP);
         townGate();
@@ -334,7 +334,7 @@ public class MyGuiTest extends JFrame implements KeyListener {
 
         mainTextArea.setForeground(Color.white);
         mainTextPanel.setBackground(Color.RED);
-        mainTextPanel.setBounds(100,100,1000,100);
+        mainTextPanel.setBounds(100,100,1000,200);
 
         choiceButtonPanel = new JPanel();
         choiceButtonPanel.setBounds(350, 350, 500, 150);
@@ -387,7 +387,7 @@ public class MyGuiTest extends JFrame implements KeyListener {
         playerPanel.setLayout(new GridLayout(1, 4));
         container.add(playerPanel);
 
-        hpLabel = new JLabel("HP: ");
+        hpLabel = new JLabel("Health: ");
         hpLabel.setFont(mainFont);
         hpLabel.setForeground(Color.WHITE);
         playerPanel.add(hpLabel);
@@ -640,7 +640,7 @@ public class MyGuiTest extends JFrame implements KeyListener {
 
     //=================GAME SCENES========================
     public void townGate() {
-        position = "townGate";
+        position = "firstScene";
         mainTextArea.setText("As you opened your eyes, you realised that you are inside of some sort of a room? " +
                              "You can see a light coming out of one of the corners...");
         choice1.setText("Look around");
@@ -649,13 +649,27 @@ public class MyGuiTest extends JFrame implements KeyListener {
         choice4.setText("Try to fall asleep");
     }
 
-    public void talkGuard() {
-        position = "talkGuard";
-        mainTextArea.setText("Guard: whatsup");
-        choice1.setText("AAAAAAAA");
-        choice2.setText("~BBBBBBBBB");
-        choice3.setText("CCCCCCCC");
-        choice4.setText("DDDDDDD");
+    public void lookAround() {
+        position = "firstSceneLookAround";
+        mainTextArea.setText("You lift your head and look around the room, there is no much light, but you can see" +
+                             " that the ceiling, floor and eveything around you is made out of wet mud and dirt. In the corner" +
+                             " of the cave    you can see a small candle burning away. By that candle you can see that one of the wall" +
+                             " is more sledged inwards than any other walls inside of this 'room'. What is your next move?");
+        choice1.setText("Go to the candle");
+        choice2.setText("Go to the wall");
+        choice3.setText("------");
+        choice4.setText("------");
+    }
+
+    public void goToTheCandle()
+    {
+        position = "goToTheCandleScene";
+        mainTextArea.setText("You move closer to the candle. You can see that the candle is really old it was made by hand from natural bee wax" +
+                             " It seems that the candle is about to burn out... What do you do?");
+        choice1.setText("Pick up the candle");
+        choice2.setText("Go to the wall");
+        choice3.setText("Go back to your previous position");
+        choice4.setText("------");
     }
 
     //==================DIFFERENT METHODS===================
@@ -856,19 +870,19 @@ public class MyGuiTest extends JFrame implements KeyListener {
 
             switch(position)
             {
-                case "townGate":
+                case "firstScene":
                     switch(yourChoice)
                     {
-                        case "c1": talkGuard(); break;
+                        case "c1": lookAround(); break;
                         case "c2": break;
                         case "c3": break;
                         case "c4": break;
                     }
                     break;
-                case "talkGuard":
+                case "firstSceneLookAround":
                     switch (yourChoice)
                     {
-                        case "c1": townGate(); break;
+                        case "c1": goToTheCandle(); break;
                         case "c2": break;
                         case "c3": break;
                         case "c4": break;
