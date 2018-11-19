@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.net.URL;
 import java.security.Key;
 import java.util.Random;
 
@@ -326,10 +327,14 @@ public class MyGuiTest extends JFrame implements KeyListener {
 
     //====================DIFFERENT SCENES==================
 
-    public void FirstScene() {
+    public void firstScene() {
         disableAllPanels();
         mainTextPanel();
         mainTextArea();
+
+        mainTextArea.setForeground(Color.white);
+        mainTextPanel.setBackground(Color.RED);
+        mainTextPanel.setBounds(100,100,1000,100);
 
         choiceButtonPanel = new JPanel();
         choiceButtonPanel.setBounds(350, 350, 500, 150);
@@ -378,7 +383,7 @@ public class MyGuiTest extends JFrame implements KeyListener {
 
         playerPanel = new JPanel();
         playerPanel.setBounds(100, 15, 1000, 50);
-        playerPanel.setBackground(Color.blue);
+        playerPanel.setBackground(Color.darkGray);
         playerPanel.setLayout(new GridLayout(1, 4));
         container.add(playerPanel);
 
@@ -564,10 +569,6 @@ public class MyGuiTest extends JFrame implements KeyListener {
 
     public void afterFirstSceneContinue()
     {
-        mainTextPanel();
-        mainTextArea();
-
-        mainTextArea.setVisible(false);
         mainTextPanel.setVisible(false);
         ContinueButtonPanel.setVisible(false);
 
@@ -640,11 +641,12 @@ public class MyGuiTest extends JFrame implements KeyListener {
     //=================GAME SCENES========================
     public void townGate() {
         position = "townGate";
-        mainTextArea.setText("You are at the gate of the town, you can see 2 guards standing beside the gate, what do you do?");
-        choice1.setText("Do nothing");
-        choice2.setText("Say Hi");
-        choice3.setText("What?");
-        choice4.setText("asmrklamsr");
+        mainTextArea.setText("As you opened your eyes, you realised that you are inside of some sort of a room? " +
+                             "You can see a light coming out of one of the corners...");
+        choice1.setText("Look around");
+        choice2.setText("Go to the light");
+        choice3.setText("Shout for help");
+        choice4.setText("Try to fall asleep");
     }
 
     public void talkGuard() {
@@ -688,37 +690,27 @@ public class MyGuiTest extends JFrame implements KeyListener {
     public void backgroundColourCounter() {
         if (backgroundColourCount == 1)
         {
-            mainTextArea.setBackground(Color.darkGray);
             container.setBackground(Color.darkGray);
-            mainTextPanel.setBackground(Color.darkGray);
             titleNamePanel.setBackground(Color.darkGray);
         }
         else if (backgroundColourCount == 2)
         {
-            mainTextArea.setBackground(Color.orange);
             container.setBackground(Color.orange);
-            mainTextPanel.setBackground(Color.orange);
             titleNamePanel.setBackground(Color.orange);
         }
         else if (backgroundColourCount == 3)
         {
-            mainTextArea.setBackground(Color.pink);
             container.setBackground(Color.pink);
-            mainTextPanel.setBackground(Color.pink);
             titleNamePanel.setBackground(Color.pink);
         }
         else if (backgroundColourCount == 4)
         {
-            mainTextArea.setBackground(Color.green);
             container.setBackground(Color.green);
-            mainTextPanel.setBackground(Color.green);
             titleNamePanel.setBackground(Color.green);
         }
         else if (backgroundColourCount == 5)
         {
-            mainTextArea.setBackground(Color.cyan);
             container.setBackground(Color.cyan);
-            mainTextPanel.setBackground(Color.cyan);
             titleNamePanel.setBackground(Color.cyan);
         }
         else
@@ -737,8 +729,8 @@ public class MyGuiTest extends JFrame implements KeyListener {
         public void actionPerformed(ActionEvent event)
         {
             //testNewJFrameWindow();
-            afterStartButtonScene();
-            //FirstScene();
+            //afterStartButtonScene();
+            firstScene();
 
         }
     }
