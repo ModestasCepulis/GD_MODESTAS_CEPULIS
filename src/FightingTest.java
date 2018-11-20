@@ -40,12 +40,16 @@ public class FightingTest extends JFrame {
                 int attack = (int) (Math.random() * ((5) + 2));
                 enemyHealth2 = enemyHealth2 - attack;
 
-                if(enemyHealth2>=0)
+                if(enemyHealth2>=-5)
                 System.out.print("\nYou attacked the enemy. \nYou have dealt: " + attack +
                         "\n\nCurrent enemy health: " + (enemyHealth2));
                 if(enemyHealth2<=0)
                     System.out.print("\n\nCongratulations, you killed the enemy.");
             }
+        }
+        else
+        {
+            System.out.print("makslrmasklr");
         }
 
     }
