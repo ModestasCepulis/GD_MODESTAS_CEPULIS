@@ -21,13 +21,20 @@ public class MyGuiTest extends JFrame{
             exitGameButtonPanel, mainTextPanel, choiceButtonPanel, playerPanel, exitConfirmationPanelYes, exitConfirmationPanelNo,
             changeTextColourPanel, changeBackgroundColourPanel, goBackPanel, ContinueButtonPanel, belowTextPanel;
 
-    JLabel titleNameLabel, hpLabel, hpLabelNumber, weaponLabel, weaponLabelName;
+    JLabel titleNameLabel, hpLabel, hpLabelNumber, itemLabel, itemLabelName;
 
     JButton startButton, optionsButton, aboutTheGameButton, exitGameButton,
             choice1, choice2, choice3, choice4, exitGameButtonYes, exitGameButtonNo, continueButton,
             changeTextColourButton, changeBackgroundColourButton, goBackButton;
 
     JTextArea mainTextArea, belowTextArea;
+
+    ImageIcon caveImage;
+    JLabel caveLabel;
+    JPanel cavePanel, caveButtonPanel;
+    JButton caveContinueButton;
+
+    caveContinueHandler caveContinueHdrl = new caveContinueHandler();
 
     StartGameHandler startGameHdlr = new StartGameHandler();
     OptionsHandler OptionsHdlr = new OptionsHandler();
@@ -102,6 +109,7 @@ public class MyGuiTest extends JFrame{
         exitGameButtonYes();
         exitGameButtonNo();
         continueButton();
+        CaveContinueButton();
         changeBackgroundColourButton();
         changeTextColourButton();
 
@@ -132,7 +140,7 @@ public class MyGuiTest extends JFrame{
 
         thePlayer.getPlayerItem(); //default player item
 
-        weaponLabelName.setText(thePlayer.getPlayerItem());
+        itemLabelName.setText(thePlayer.getPlayerItem());
         hpLabelNumber.setText("" + playerHP);
         townGate();
     }
@@ -218,7 +226,17 @@ public class MyGuiTest extends JFrame{
         continueButton.setBorder(BorderFactory.createEmptyBorder());
         continueButton.setFocusPainted(false);
         continueButton.addActionListener(continueButtonHdrl);
-        //exitGameButtonNo.addActionListener(exitGameButtonNoHdlr);
+    }
+
+    public void CaveContinueButton()
+    {
+        caveContinueButton = new JButton("Continue");
+        caveContinueButton.setBackground(Color.black);
+        caveContinueButton.setForeground(Color.white);
+        caveContinueButton.setFont(mainFont);
+        caveContinueButton.setBorder(BorderFactory.createEmptyBorder());
+        caveContinueButton.setFocusPainted(false);
+        caveContinueButton.addActionListener(caveContinueHdrl);
     }
 
     public void changeTextColourButton() {
@@ -364,15 +382,15 @@ public class MyGuiTest extends JFrame{
         hpLabelNumber.setForeground(Color.white);
         playerPanel.add(hpLabelNumber);
 
-        weaponLabel = new JLabel("Item: ");
-        weaponLabel.setFont(mainFont);
-        weaponLabel.setForeground(Color.white);
-        playerPanel.add(weaponLabel);
+        itemLabel = new JLabel("Item: ");
+        itemLabel.setFont(mainFont);
+        itemLabel.setForeground(Color.white);
+        playerPanel.add(itemLabel);
 
-        weaponLabelName = new JLabel();
-        weaponLabelName.setFont(mainFont);
-        weaponLabelName.setForeground(Color.white);
-        playerPanel.add(weaponLabelName);
+        itemLabelName = new JLabel();
+        itemLabelName.setFont(mainFont);
+        itemLabelName.setForeground(Color.white);
+        playerPanel.add(itemLabelName);
 
         playerSetup();
     }
@@ -539,6 +557,29 @@ public class MyGuiTest extends JFrame{
         mainTextPanel.setVisible(false);
         ContinueButtonPanel.setVisible(false);
 
+        caveImage = new ImageIcon(getClass().getResource("Images/CavePicture.gif"));
+        caveLabel = new JLabel(caveImage);
+
+        cavePanel = new JPanel();
+        cavePanel.setBounds(100, 100, 950, 500);
+        cavePanel.setBackground(Color.black);
+        cavePanel.add(caveLabel);
+
+        container.add(cavePanel);
+
+        caveButtonPanel = new JPanel();
+        caveButtonPanel.setBounds(470, 620, 200, 50);
+        caveButtonPanel.setBackground(Color.black);
+        caveButtonPanel.add(caveContinueButton);
+        container.add(caveButtonPanel);
+
+
+
+
+
+
+
+
     }
 
 
@@ -643,13 +684,13 @@ public class MyGuiTest extends JFrame{
     public void pickUpTheCandle()
     {
         thePlayer.setPlayerItem("Candle");
+        //this actually changes the current text to whatever we have it set with .setPlayerItem
+        itemLabelName.setText(thePlayer.getPlayerItem());
         thePlayer.setPlayerHP(2);
         candleEquipped = true;
         position = "pickUpTheCandle";
 
-        System.out.print("nannaa?" + thePlayer.getPlayerItem());
-
-        mainTextArea.setText("You picked up the candle. Now you can move the source of light around you, it helps to see things more clearly.");
+        mainTextArea.setText("You picked up the candle. Now you can move the source of light around you, it will help you to see things more clearly.");
         choice1.setText("Go to the wall");
         choice2.setText("Go back to the previous position");
         choice3.setText("------");
@@ -658,7 +699,7 @@ public class MyGuiTest extends JFrame{
 
     //==================DIFFERENT METHODS===================
 
-    public void textColourCounter() {
+    public void textColourChanger() {
         if (textColourCount == 1) {
             mainTextArea.setForeground(Color.white);
             mainTextPanel.setForeground(Color.white);
@@ -727,8 +768,8 @@ public class MyGuiTest extends JFrame{
         public void actionPerformed(ActionEvent event)
         {
             //testNewJFrameWindow();
-            //afterStartButtonScene();
-            firstScene();
+            afterStartButtonScene();
+            //firstScene();
 
         }
     }
@@ -790,7 +831,7 @@ public class MyGuiTest extends JFrame{
         public void actionPerformed(ActionEvent event)
         {
             textColourCount++;
-            textColourCounter();
+            textColourChanger();
         }
     }
 
@@ -809,6 +850,17 @@ public class MyGuiTest extends JFrame{
         {
 
             fontTypeCount++;
+        }
+    }
+
+    public class caveContinueHandler implements ActionListener
+    {
+        public void actionPerformed(ActionEvent event)
+        {
+
+            cavePanel.setVisible(false);
+            caveButtonPanel.setVisible(false);
+            firstScene();
         }
     }
 
