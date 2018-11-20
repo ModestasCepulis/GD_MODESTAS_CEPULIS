@@ -60,8 +60,6 @@ public class MyGuiTest extends JFrame{
 
     String position;
 
-    JTextField keyText = new JTextField(80);
-
     boolean candleEquipped = false;
 
 
@@ -665,8 +663,8 @@ public class MyGuiTest extends JFrame{
                              " is more sledged inwards than any other walls inside of this 'room'. What is your next move?");
         choice1.setText("Go to the candle");
         choice2.setText("Go to the wall");
-        choice3.setText("------");
-        choice4.setText("------");
+        choice3.setText("Shout for help");
+        choice4.setText("Try to fall asleep");
     }
 
     public void goToTheCandle()
@@ -693,8 +691,55 @@ public class MyGuiTest extends JFrame{
         mainTextArea.setText("You picked up the candle. Now you can move the source of light around you, it will help you to see things more clearly.");
         choice1.setText("Go to the wall");
         choice2.setText("Go back to the previous position");
+        choice3.setText("Shout for help");
+        choice4.setText("Try to fall asleep");
+    }
+
+    public void goToTheLight()
+    {
+        position = "goToTheLight";
+
+        mainTextArea.setText("As you move closer to the light you realised that the light is actually coming out of an object " +
+                             "and the object reminds you of a candle.");
+
+        choice1.setText("Pick up the candle");
+        choice2.setText("Go back to the previous position");
+        choice3.setText("Shout for help");
+        choice4.setText("Try to fall asleep");
+    }
+
+    public void shoutForHelp()
+    {
+
+        position = "shoutForHelp";
+
+        mainTextArea.setText("You scream out top of your lungs... No answer. Is anyone even here? As it seems" +
+                             "   you can only hear your dry voice echoing around the place...");
+
+        choice1.setText("Look around");
+        choice2.setText("Go to the light");
         choice3.setText("------");
+        choice4.setText("Try to fall asleep");
+    }
+
+    public void tryToFallAsleep()
+    {
+        position = "tryToFallAsleep";
+
+        mainTextArea.setText("You walk to the nearest corner, lay down and close your eyes... 'Maybe this will help' " +
+                             " - you think to yourself. As easy it is to fall asleep in a cave, you just can't really do it. ");
+
+        choice1.setText("Look around");
+        choice2.setText("Go to the light");
+        choice3.setText("Shout for help");
         choice4.setText("------");
+    }
+
+    public void goToTheWall()
+    {
+        position = "goToTheWall";
+
+
     }
 
     //==================DIFFERENT METHODS===================
@@ -909,19 +954,21 @@ public class MyGuiTest extends JFrame{
                 case "firstScene":
                     switch(yourChoice)
                     {
+                        //first Scene choices
                         case "c1": lookAround(); break;
-                        case "c2": break;
-                        case "c3": break;
-                        case "c4": break;
+                        case "c2": goToTheLight();break;
+                        case "c3": shoutForHelp();break;
+                        case "c4": tryToFallAsleep();break;
                     }
                     break;
                 case "firstSceneLookAround":
                     switch (yourChoice)
                     {
+                        //firstScene/Look Around
                         case "c1": goToTheCandle(); break;
-                        case "c2": break;
-                        case "c3": break;
-                        case "c4": break;
+                        case "c2": goToTheWall(); break;
+                        case "c3": shoutForHelp();break;
+                        case "c4": tryToFallAsleep();break;
                     }
                     break;
                 case "goToTheCandleScene":
@@ -939,6 +986,33 @@ public class MyGuiTest extends JFrame{
                         case "c2": break;
                         case "c3": break;
                         case "c4": break;
+                    }
+                    break;
+                case "goToTheLight":
+                    switch(yourChoice)
+                    {
+                        case "c1": pickUpTheCandle();break;
+                        case "c2": townGate();break;
+                        case "c3": break;
+                        case "c4": break;
+                    }
+                    break;
+                case "shoutForHelp":
+                    switch(yourChoice)
+                    {
+                        case "c1": lookAround();break;
+                        case "c2": goToTheLight();break;
+                        case "c3": break;
+                        case "c4": tryToFallAsleep();break;
+                    }
+                    break;
+                case "tryToFallAsleep":
+                    switch(yourChoice)
+                    {
+                        case "c1": pickUpTheCandle();break;
+                        case "c2": goToTheLight();break;
+                        case "c3": shoutForHelp();break;
+                        case "c4": ;break;
                     }
 
             }
