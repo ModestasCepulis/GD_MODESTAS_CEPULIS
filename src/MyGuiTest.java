@@ -56,7 +56,9 @@ public class MyGuiTest extends JFrame{
     Font exitFont = new Font("Arial", Font.PLAIN, 45);
 
     int playerHP;
-    int textColourCount = 1, backgroundColourCount = 1, fontTypeCount=1;
+    int textColourCount = 1, backgroundColourCount = 1;
+    int enemyHealth = 20;
+    int candleAdditionalDamage = 2;
 
     String position;
 
@@ -653,10 +655,16 @@ public class MyGuiTest extends JFrame{
         choice2.setText("Go to the light");
         choice3.setText("Shout for help");
         choice4.setText("Try to fall asleep");
+
+       //sets the players and guards health back to its original state after the player dies
+        playerHP = 25;
+        enemyHealth = 20;
+        hpLabelNumber.setText("" + playerHP);
     }
 
     public void lookAround() {
         position = "firstSceneLookAround";
+
         mainTextArea.setText("You lift your head and look around the room, there is no much light, but you can see" +
                              " that the ceiling, floor and eveything around you is made out of wet mud and dirt. In the corner" +
                              " of the cave    you can see a small candle burning away. By that candle you can see that one of the wall" +
@@ -737,9 +745,167 @@ public class MyGuiTest extends JFrame{
 
     public void goToTheWall()
     {
+
         position = "goToTheWall";
 
+        mainTextArea.setText("You move towards the wall. While you were looking at it for couple of minutes you realised that " +
+                " the 'inward' section of the wall was an actual wooden door. ");
 
+        choice1.setText("Knock on the door");
+        choice2.setText("Go back to the previous position");
+        choice3.setText("Try to open the door");
+        choice4.setText("------");
+
+        playerHP = 25;
+        hpLabelNumber.setText("" + playerHP);
+
+
+    }
+
+    public void knockOnDoor()
+    {
+        position = "knockOnDoor";
+
+        mainTextArea.setText("You lift your hand towards the door and you give it few hard knocks... No answer... ");
+
+        choice1.setText("------");
+        choice2.setText("Go back to the previous position");
+        choice3.setText("Try to open the door");
+        choice4.setText("------");
+    }
+
+    public void openTheDoor()
+    {
+        position = "openTheDoor";
+
+        mainTextArea.setText("You extend your arms towards the door, you put your whole weight on it and try to push " +
+                             "The door makes a loud cranky noise and the door opens...");
+
+        choice1.setText("Enter");
+        choice2.setText("------");
+        choice3.setText("------");
+        choice4.setText("------");
+    }
+
+    public void extinguishTheFire()
+    {
+        position = "extinguishFire";
+
+        mainTextArea.setText("You move the palm over the candle to put it out, you succeed but you lose some health and a light source." +
+                             " Why did you do that?");
+
+        playerHP = playerHP - 5;
+        hpLabelNumber.setText("" + playerHP);
+
+        choice1.setText("------");
+        choice2.setText("Go to the wall");
+        choice3.setText("Go back to your previous position");
+        choice4.setText("------");
+    }
+
+    public void enterTheDoor()
+    {
+        position = "enterTheDoor";
+
+        mainTextArea.setText("You enter the room, this room is even smaller than the one you came from," +
+                             " you can see various objects around you, from table with chairs, fireplace, big wooden door, " +
+                             "and? what? you can't believe your eyes... Who is that?" +
+                             "\n\nGuard: You shouldn't suppouse to be here! Now you will have to pay.");
+
+        choice1.setText("Attack the guard");
+        choice2.setText("Run");
+        choice3.setText("------");
+        choice4.setText("------");
+    }
+
+    public void attackTheGuard()
+    {
+        //this sets the current scene position to 'attackTheGuard' which will allow the system to track
+        //on what scene is the user at.
+        position = "attackTheGuard";
+
+        //An array of different gaurds weapons that he can attack with
+        String[] enemyWeapons = new String[5];
+        enemyWeapons[0] = "Fists";
+        enemyWeapons[1] = "Dagger";
+        enemyWeapons[2] = "Back of the sword";
+        enemyWeapons[3] = "Kicking attack";
+        enemyWeapons[4] = "Scissors";
+
+
+        //this gets a random number and sets it as player attack power.
+        int playerAttack = (int) (Math.random() * ((5) + 2));
+        //this gets a random number and sets it as enemy attack power.
+        int enemyAttack = (int) (Math.random() * ((5) + 2));
+
+        //this creates a random number for the array of guards weapons which then chooses the weapon that
+        //the guards has/attacks the player with depending on the number.
+        String enemyWeapon = enemyWeapons[(int)(Math.random() * ((4) + 1))];
+
+        //this subtracts the enemyhealth depending on the number that we get in 'player attack'
+        enemyHealth = enemyHealth - playerAttack;
+        playerHP = playerHP - enemyAttack;
+
+        //This if attacks additional 2 attack points to the player attack if the player currently
+        //has a candle equipped (which can be eqquiped earlier in the game)
+        if(candleEquipped)
+        {
+            playerAttack = playerAttack + candleAdditionalDamage;
+        }
+
+        System.out.print("\nPlayer attack damage:" + playerAttack);
+        mainTextArea.setText("You attack the guard with: " + thePlayer.getPlayerItem() +
+                             " and do: " + playerAttack + " damage."
+                             +"\nGuards current health: " + enemyHealth
+                             +"\n\nThe guard attacks you with: " + enemyWeapon
+                             +"\nAnd deals: " + enemyAttack + " damage.");
+
+        //this updates the playerhealth.
+        hpLabelNumber.setText("" + playerHP);
+
+        choice1.setText("Attack the guard");
+        choice2.setText("Run");
+        choice3.setText("------");
+        choice4.setText("------");
+
+        //if the enemy heal is below or equal to 0 it calls guardKilled method
+        if(enemyHealth<=0)
+        {
+            guardKilled();
+        }
+        //if the player heal is below or equal to 0 it calls playerKilled method
+        else if(playerHP<=0)
+        {
+            playerKilled();
+        }
+    }
+
+    public void guardKilled()
+    {
+        position = "guardKilled";
+
+        mainTextArea.setText("Guards current health: 0 " +
+                             "\nCongratulations! You've survived and killed the guard! \nWhat is your next move?");
+
+        choice1.setText("Search the guard");
+        choice2.setText("Go to the door and open it");
+        choice3.setText("------");
+        choice4.setText("------");
+    }
+
+    public void playerKilled()
+    {
+        position = "playerKilled";
+
+        thePlayer.setPlayerHP(playerHP);
+
+        mainTextArea.setText("Players current health: " + thePlayer.getPlayerHP() +
+                "\nIt seems that you've messed up, well its not that bad at it seems, it just that you will have to try again...");
+
+        choice1.setText("Go to the start");
+        choice2.setText("------");
+        choice3.setText("------");
+        choice4.setText("------");
     }
 
     //==================DIFFERENT METHODS===================
@@ -889,15 +1055,6 @@ public class MyGuiTest extends JFrame{
         }
     }
 
-    public class changeTextFontHandler implements ActionListener
-    {
-        public void actionPerformed(ActionEvent event)
-        {
-
-            fontTypeCount++;
-        }
-    }
-
     public class caveContinueHandler implements ActionListener
     {
         public void actionPerformed(ActionEvent event)
@@ -974,18 +1131,19 @@ public class MyGuiTest extends JFrame{
                 case "goToTheCandleScene":
                     switch (yourChoice)
                     {
-                        case "c1": goToTheCandle(); break;
-                        case "c2": break;
-                        case "c3": break;
-                        case "c4": break;
+                        case "c1": pickUpTheCandle(); break;
+                        case "c2": goToTheWall();break;
+                        case "c3": lookAround();break;
+                        case "c4": extinguishTheFire(); break;
                     }
+                    break;
                 case "pickUpTheCandle":
                     switch (yourChoice)
                     {
-                        case "c1": pickUpTheCandle();break;
-                        case "c2": break;
-                        case "c3": break;
-                        case "c4": break;
+                        case "c1": goToTheWall();break;
+                        case "c2": goToTheCandle();break;
+                        case "c3": shoutForHelp();break;
+                        case "c4": tryToFallAsleep();break;
                     }
                     break;
                 case "goToTheLight":
@@ -993,8 +1151,8 @@ public class MyGuiTest extends JFrame{
                     {
                         case "c1": pickUpTheCandle();break;
                         case "c2": townGate();break;
-                        case "c3": break;
-                        case "c4": break;
+                        case "c3": shoutForHelp();break;
+                        case "c4": tryToFallAsleep();break;
                     }
                     break;
                 case "shoutForHelp":
@@ -1009,11 +1167,93 @@ public class MyGuiTest extends JFrame{
                 case "tryToFallAsleep":
                     switch(yourChoice)
                     {
-                        case "c1": pickUpTheCandle();break;
+                        case "c1": lookAround();break;
                         case "c2": goToTheLight();break;
                         case "c3": shoutForHelp();break;
                         case "c4": ;break;
                     }
+                    break;
+                case "goToTheWall":
+                    switch(yourChoice)
+                    {
+                        case "c1": knockOnDoor();break;
+                        case "c2": lookAround();break;
+                        case "c3": openTheDoor();break;
+                        case "c4": ;break;
+                    }
+                    break;
+                case "knockOnDoor":
+                    switch(yourChoice)
+                    {
+                        case "c1": break;
+                        case "c2": goToTheWall();break;
+                        case "c3": openTheDoor();break;
+                        case "c4": ;break;
+                    }
+                    break;
+                case "extinguishFire":
+                    switch(yourChoice)
+                    {
+                        case "c1": break;
+                        case "c2": goToTheWall();break;
+                        case "c3": goToTheCandle();break;
+                        case "c4": ;break;
+                    }
+                    break;
+                case "openTheDoor":
+                    switch(yourChoice)
+                    {
+                        case "c1": enterTheDoor();break;
+                        case "c2": break;
+                        case "c3": break;
+                        case "c4": ;break;
+                    }
+                    break;
+                case "enterTheDoor":
+                    switch(yourChoice)
+                    {
+                        case "c1": attackTheGuard();break;
+                        case "c2": break;
+                        case "c3": break;
+                        case "c4": ;break;
+                    }
+                    break;
+                case "attackTheGuard":
+                    switch(yourChoice)
+                    {
+                        case "c1": attackTheGuard();break;
+                        case "c2": break;
+                        case "c3": break;
+                        case "c4": ;break;
+                    }
+                    break;
+                case "runFromTheGuard":
+                    switch(yourChoice)
+                    {
+                        case "c1": attackTheGuard();break;
+                        case "c2": break;
+                        case "c3": break;
+                        case "c4": ;break;
+                    }
+                    break;
+                case "guardKilled":
+                    switch(yourChoice)
+                    {
+                        case "c1": attackTheGuard();break;
+                        case "c2": break;
+                        case "c3": break;
+                        case "c4": ;break;
+                    }
+                    break;
+                case "playerKilled":
+                    switch(yourChoice)
+                    {
+                        case "c1": townGate();break;
+                        case "c2": break;
+                        case "c3": break;
+                        case "c4": ;break;
+                    }
+                    break;
 
             }
 
