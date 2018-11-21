@@ -29,12 +29,21 @@ public class MyGuiTest extends JFrame{
 
     JTextArea mainTextArea, belowTextArea;
 
+    //==========Cave image variables==========
     ImageIcon caveImage;
     JLabel caveLabel;
     JPanel cavePanel, caveButtonPanel;
     JButton caveContinueButton;
 
     caveContinueHandler caveContinueHdrl = new caveContinueHandler();
+
+    //==========Market image variables=========
+    ImageIcon marketImage;
+    JLabel marketLabel;
+    JPanel marketPanel, marketButtonPanel;
+    JButton marketContinueButton;
+
+    marketContinueHandler marketContinueHdrl = new marketContinueHandler();
 
     StartGameHandler startGameHdlr = new StartGameHandler();
     OptionsHandler OptionsHdlr = new OptionsHandler();
@@ -58,11 +67,12 @@ public class MyGuiTest extends JFrame{
     int playerHP;
     int textColourCount = 1, backgroundColourCount = 1;
     int enemyHealth = 20;
-    int candleAdditionalDamage = 2;
+    int playerAttack, enemyAttack;
+    int candleAdditionalDamage, daggerAdditionalDamage;
 
     String position;
 
-    boolean candleEquipped = false;
+    boolean candleEquipped = false, keyAcquired = false, daggerEquipped=false;
 
 
     public static void main(String[] args) {
@@ -110,6 +120,7 @@ public class MyGuiTest extends JFrame{
         exitGameButtonNo();
         continueButton();
         CaveContinueButton();
+        MarketContinueButton();
         changeBackgroundColourButton();
         changeTextColourButton();
 
@@ -142,7 +153,27 @@ public class MyGuiTest extends JFrame{
 
         itemLabelName.setText(thePlayer.getPlayerItem());
         hpLabelNumber.setText("" + playerHP);
-        townGate();
+        firstLaunchScene();
+    }
+
+    //==================INVENTORY SETUP==================
+
+    public void itemsEquipped()
+    {
+        candleAdditionalDamage=3;
+        daggerAdditionalDamage=6;
+
+        //checks if the candle is equipped.
+        if(candleEquipped)
+        {
+            playerAttack += candleAdditionalDamage;
+        }
+
+        if(daggerEquipped)
+        {
+            playerAttack += daggerAdditionalDamage;
+        }
+
     }
 
     //===================BUTTON METHODS===================
@@ -237,6 +268,17 @@ public class MyGuiTest extends JFrame{
         caveContinueButton.setBorder(BorderFactory.createEmptyBorder());
         caveContinueButton.setFocusPainted(false);
         caveContinueButton.addActionListener(caveContinueHdrl);
+    }
+
+    public void MarketContinueButton()
+    {
+        marketContinueButton = new JButton("Continue");
+        marketContinueButton.setBackground(Color.black);
+        marketContinueButton.setForeground(Color.white);
+        marketContinueButton.setFont(mainFont);
+        marketContinueButton.setBorder(BorderFactory.createEmptyBorder());
+        marketContinueButton.setFocusPainted(false);
+        marketContinueButton.addActionListener(marketContinueHdrl);
     }
 
     public void changeTextColourButton() {
@@ -582,6 +624,33 @@ public class MyGuiTest extends JFrame{
 
     }
 
+    public void marketScene()
+    {
+        mainTextPanel.setVisible(false);
+        ContinueButtonPanel.setVisible(false);
+        choice1.setVisible(false);
+        choice2.setVisible(false);
+        choice3.setVisible(false);
+        choice4.setVisible(false);
+        playerPanel.setVisible(false);
+
+        marketImage = new ImageIcon(getClass().getResource("Images/marketImage.gif"));
+        marketLabel = new JLabel(marketImage);
+
+        marketPanel = new JPanel();
+        marketPanel.setBounds(200, 100, 750, 500);
+        marketPanel.setBackground(Color.black);
+        marketPanel.add(marketLabel);
+
+        container.add(marketPanel);
+
+        marketButtonPanel = new JPanel();
+        marketButtonPanel.setBounds(470, 620, 200, 50);
+        marketButtonPanel.setBackground(Color.black);
+        marketButtonPanel.add(marketContinueButton);
+        container.add(marketButtonPanel);
+    }
+
 
     public void mainMenuGUIChangedColors()
     {
@@ -627,6 +696,7 @@ public class MyGuiTest extends JFrame{
         changeBackgroundColourButton();
         changeTextColourButton();
 
+
         //This adds the labels and buttons to he panels
         titleNamePanel.add(titleNameLabel);
         optionsButtonPanel.add(optionsButton);
@@ -647,7 +717,7 @@ public class MyGuiTest extends JFrame{
     }
 
     //=================GAME SCENES========================
-    public void townGate() {
+    public void firstLaunchScene() {
         position = "firstScene";
         mainTextArea.setText("As you opened your eyes, you realised that you are inside of some sort of a room? " +
                              "You can see a light coming out of one of the corners...");
@@ -824,6 +894,8 @@ public class MyGuiTest extends JFrame{
         //on what scene is the user at.
         position = "attackTheGuard";
 
+        itemsEquipped();
+
         //An array of different gaurds weapons that he can attack with
         String[] enemyWeapons = new String[5];
         enemyWeapons[0] = "Fists";
@@ -834,9 +906,11 @@ public class MyGuiTest extends JFrame{
 
 
         //this gets a random number and sets it as player attack power.
-        int playerAttack = (int) (Math.random() * ((5) + 2));
+        playerAttack = (int) (Math.random() * ((5) + 2));
         //this gets a random number and sets it as enemy attack power.
-        int enemyAttack = (int) (Math.random() * ((5) + 2));
+        enemyAttack = (int) (Math.random() * ((5) + 2));
+
+        itemsEquipped();
 
         //this creates a random number for the array of guards weapons which then chooses the weapon that
         //the guards has/attacks the player with depending on the number.
@@ -848,10 +922,6 @@ public class MyGuiTest extends JFrame{
 
         //This if attacks additional 2 attack points to the player attack if the player currently
         //has a candle equipped (which can be eqquiped earlier in the game)
-        if(candleEquipped)
-        {
-            playerAttack = playerAttack + candleAdditionalDamage;
-        }
 
         System.out.print("\nPlayer attack damage:" + playerAttack);
         mainTextArea.setText("You attack the guard with: " + thePlayer.getPlayerItem() +
@@ -907,6 +977,74 @@ public class MyGuiTest extends JFrame{
         choice3.setText("------");
         choice4.setText("------");
     }
+
+    public void searchTheGuard()
+    {
+        position = "searchTheGuard";
+
+        //this checks if the items are equipped, and if they are the system gives the additional buffs to the player.
+        itemsEquipped();
+
+        keyAcquired = true;
+        candleEquipped = false;
+        daggerEquipped = true;
+
+        mainTextArea.setText("You lowered your body towards the guard. He's dead. You decide to look through his items." +
+                             "You managed to find few items: A dagger, an apple and bunch of old keys.");
+
+        choice1.setText("Go to the metal door");
+        choice2.setText("Eat the apple");
+        choice3.setText("Equip the dagger");
+        choice4.setText("------");
+    }
+
+    public void goMetalDoor()
+    {
+        position = "goMetalDoor";
+
+        itemsEquipped();
+
+        if(keyAcquired)
+        {
+            mainTextArea.setText("You walked to the door, it seems that it is locked. You remembered that you have bunch of old " +
+                                 "keys that you got from the guard. You spent 15 minutes trying every rusted key and eventually one of them " +
+                                 "worked. You put the key in, pushed right and the big metal door slowly opened...");
+
+            choice1.setText("Continue");
+            choice2.setText("------");
+            choice3.setText("------");
+            choice4.setText("------");
+        }
+        else
+        {
+            mainTextArea.setText("You tried to open the door. It didn't work, it seems that it is locked. " +
+                                 "You will have to find something to open the door with. Go back.");
+
+            choice1.setText("------");
+            choice2.setText("------");
+            choice3.setText("Go to previous position");
+            choice4.setText("Search the guard");
+        }
+    }
+
+
+    public void eatTheApple()
+    {
+
+    }
+
+    public void equipDagger()
+    {
+
+    }
+
+    public void ContinueMetalDoor()
+    {
+        marketScene();
+
+    }
+
+
 
     //==================DIFFERENT METHODS===================
 
@@ -1066,6 +1204,15 @@ public class MyGuiTest extends JFrame{
         }
     }
 
+    public class marketContinueHandler implements ActionListener
+    {
+        public void actionPerformed(ActionEvent event)
+        {
+            marketPanel.setVisible(false);
+            marketButtonPanel.setVisible(false);
+        }
+    }
+
     public class goBackHandler implements ActionListener
     {
         public void actionPerformed(ActionEvent event)
@@ -1150,7 +1297,7 @@ public class MyGuiTest extends JFrame{
                     switch(yourChoice)
                     {
                         case "c1": pickUpTheCandle();break;
-                        case "c2": townGate();break;
+                        case "c2": firstLaunchScene();break;
                         case "c3": shoutForHelp();break;
                         case "c4": tryToFallAsleep();break;
                     }
@@ -1239,8 +1386,8 @@ public class MyGuiTest extends JFrame{
                 case "guardKilled":
                     switch(yourChoice)
                     {
-                        case "c1": attackTheGuard();break;
-                        case "c2": break;
+                        case "c1": searchTheGuard();break;
+                        case "c2": goMetalDoor();break;
                         case "c3": break;
                         case "c4": ;break;
                     }
@@ -1248,10 +1395,28 @@ public class MyGuiTest extends JFrame{
                 case "playerKilled":
                     switch(yourChoice)
                     {
-                        case "c1": townGate();break;
+                        case "c1": firstLaunchScene();break;
                         case "c2": break;
                         case "c3": break;
                         case "c4": ;break;
+                    }
+                    break;
+                case "searchTheGuard":
+                    switch(yourChoice)
+                    {
+                        case "c1": goMetalDoor();break;
+                        case "c2": eatTheApple();break;
+                        case "c3": equipDagger();break;
+                        case "c4": break;
+                    }
+                    break;
+                case "goMetalDoor":
+                    switch(yourChoice)
+                    {
+                        case "c1": ContinueMetalDoor();break;
+                        case "c2": break;
+                        case "c3": guardKilled();break;
+                        case "c4": searchTheGuard();break;
                     }
                     break;
 
