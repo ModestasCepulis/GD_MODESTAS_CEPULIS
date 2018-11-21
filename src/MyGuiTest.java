@@ -43,6 +43,10 @@ public class MyGuiTest extends JFrame{
     JPanel marketPanel, marketButtonPanel;
     JButton marketContinueButton;
 
+
+    //=========Health items============
+    int appleGivenHealth;
+
     marketContinueHandler marketContinueHdrl = new marketContinueHandler();
 
     StartGameHandler startGameHdlr = new StartGameHandler();
@@ -172,6 +176,10 @@ public class MyGuiTest extends JFrame{
         if(daggerEquipped)
         {
             playerAttack += daggerAdditionalDamage;
+            thePlayer.setPlayerItem("Dagger");
+            //this actually changes the current text to whatever we have it set with .setPlayerItem
+            itemLabelName.setText(thePlayer.getPlayerItem());
+
         }
 
     }
@@ -826,10 +834,6 @@ public class MyGuiTest extends JFrame{
         choice3.setText("Try to open the door");
         choice4.setText("------");
 
-        playerHP = 25;
-        hpLabelNumber.setText("" + playerHP);
-
-
     }
 
     public void knockOnDoor()
@@ -883,7 +887,7 @@ public class MyGuiTest extends JFrame{
                              "\n\nGuard: You shouldn't suppouse to be here! Now you will have to pay.");
 
         choice1.setText("Attack the guard");
-        choice2.setText("Run");
+        choice2.setText("------");
         choice3.setText("------");
         choice4.setText("------");
     }
@@ -934,7 +938,7 @@ public class MyGuiTest extends JFrame{
         hpLabelNumber.setText("" + playerHP);
 
         choice1.setText("Attack the guard");
-        choice2.setText("Run");
+        choice2.setText("------");
         choice3.setText("------");
         choice4.setText("------");
 
@@ -944,7 +948,7 @@ public class MyGuiTest extends JFrame{
             guardKilled();
         }
         //if the player heal is below or equal to 0 it calls playerKilled method
-        else if(playerHP<=0)
+        else if(playerHP<=1)
         {
             playerKilled();
         }
@@ -970,7 +974,9 @@ public class MyGuiTest extends JFrame{
         thePlayer.setPlayerHP(playerHP);
 
         mainTextArea.setText("Players current health: " + thePlayer.getPlayerHP() +
-                "\nIt seems that you've messed up, well its not that bad at it seems, it just that you will have to try again...");
+                "\nIt seems that you've messed up, you might've died or your hp is too low " +
+                " to continue the fight..." +
+                "\n well its not that bad at it seems, it just that you will have to try again...");
 
         choice1.setText("Go to the start");
         choice2.setText("------");
@@ -1030,18 +1036,70 @@ public class MyGuiTest extends JFrame{
 
     public void eatTheApple()
     {
+        position = "eatTheApple";
+
+        mainTextArea.setText("You check the guards body and find an apple, maybe its still good, who knows, " +
+                            " but you eat it anyway. It is not much, but still better than nothing. " +
+                            "\n(+25 HEALTH)");
+
+        choice1.setText("Go to the metal door");
+        choice2.setText("------");
+        choice3.setText("Equip the dagger");
+        choice4.setText("------");
+
+        appleGivenHealth = 35;
+        playerHP += appleGivenHealth;
+        hpLabelNumber.setText("" + playerHP);
 
     }
 
     public void equipDagger()
     {
 
+        position = "equipDagger";
+
+        mainTextArea.setText("You check the guards body and find a dagger, it doesn't look sharp, but it is better than fighting with " + thePlayer.getPlayerItem() +
+                " So you decide to throw away your weapon and equip the new one. " +
+                "\n(+6 DAMAGE)");
+
+        candleEquipped = false;
+        itemsEquipped();
+
+        choice1.setText("Go to the metal door");
+        choice2.setText("------");
+        choice3.setText("------");
+        choice4.setText("------");
+
     }
 
     public void ContinueMetalDoor()
     {
-        marketScene();
+        position = "enteringMarket";
 
+        mainTextArea.setText("As you push the door open, you can finally start smelling something more than just wet mud and dirt." +
+                             "\nYou started to hear sounds again, see the sunshine in your eyes, but where are you?" +
+                             "\nThis place oddly reminds you of some kind of a market...");
+
+        itemsEquipped();
+
+        choice1.setText("Continue");
+        choice2.setText("------");
+        choice3.setText("------");
+        choice4.setText("------");
+
+    }
+
+    public void runFromAttack()
+    {
+        position = "runFromAttack";
+
+        mainTextArea.setText("You lowered your body towards the guard. He's dead. You decide to look through his items." +
+                "You managed to find few items: A dagger, an apple and bunch of old keys.");
+
+        choice1.setText("Go to the metal door");
+        choice2.setText("Eat the apple");
+        choice3.setText("Equip the dagger");
+        choice4.setText("------");
     }
 
 
@@ -1362,7 +1420,7 @@ public class MyGuiTest extends JFrame{
                         case "c1": attackTheGuard();break;
                         case "c2": break;
                         case "c3": break;
-                        case "c4": ;break;
+                        case "c4": break;
                     }
                     break;
                 case "attackTheGuard":
@@ -1371,7 +1429,7 @@ public class MyGuiTest extends JFrame{
                         case "c1": attackTheGuard();break;
                         case "c2": break;
                         case "c3": break;
-                        case "c4": ;break;
+                        case "c4": break;
                     }
                     break;
                 case "runFromTheGuard":
@@ -1417,6 +1475,33 @@ public class MyGuiTest extends JFrame{
                         case "c2": break;
                         case "c3": guardKilled();break;
                         case "c4": searchTheGuard();break;
+                    }
+                    break;
+                case "eatTheApple":
+                    switch(yourChoice)
+                    {
+                        case "c1": ContinueMetalDoor();break;
+                        case "c2": break;
+                        case "c3": equipDagger();break;
+                        case "c4": searchTheGuard();break;
+                    }
+                    break;
+                case "equipDagger":
+                    switch(yourChoice)
+                    {
+                        case "c1": ContinueMetalDoor();break;
+                        case "c2": break;
+                        case "c3": break;
+                        case "c4": break;
+                    }
+                    break;
+                case "enteringMarket":
+                    switch(yourChoice)
+                    {
+                        case "c1": marketScene();break;
+                        case "c2": break;
+                        case "c3": break;
+                        case "c4": break;
                     }
                     break;
 
