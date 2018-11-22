@@ -15,6 +15,7 @@ public class MyGuiTest extends JFrame{
 
     static Player thePlayer;
     static shopTest theShop;
+    static Scenes theScenes;
 
     Container container;
 
@@ -87,6 +88,7 @@ public class MyGuiTest extends JFrame{
 
         thePlayer = new Player();
         theShop = new shopTest();
+        theScenes = new Scenes();
         new MyGuiTest();
     }
 
@@ -748,26 +750,25 @@ public class MyGuiTest extends JFrame{
     public void lookAround() {
         position = "firstSceneLookAround";
 
-        mainTextArea.setText("You lift your head and look around the room, there is no much light, but you can see" +
-                             " that the ceiling, floor and eveything around you is made out of wet mud and dirt. In the corner" +
-                             " of the cave    you can see a small candle burning away. By that candle you can see that one of the wall" +
-                             " is more sledged inwards than any other walls inside of this 'room'. What is your next move?");
-        choice1.setText("Go to the candle");
-        choice2.setText("Go to the wall");
-        choice3.setText("Shout for help");
-        choice4.setText("Try to fall asleep");
+        theScenes.lookAround();
+        updateScene();
+    }
+
+
+    //a method that updates all of the scenes
+    private void updateScene(){
+        mainTextArea.setText(theScenes.mainTextArea);
+        choice1.setText(theScenes.choice1);
+        choice2.setText(theScenes.choice2);
+        choice3.setText(theScenes.choice3);
+        choice4.setText(theScenes.choice4);
     }
 
     public void goToTheCandle()
     {
         position = "goToTheCandleScene";
-
-        mainTextArea.setText("You move closer to the candle. You can see that the candle is really old it was made by hand from natural bee wax" +
-                             " It seems that the candle is about to burn out... What do you do?");
-        choice1.setText("Pick up the candle");
-        choice2.setText("Go to the wall");
-        choice3.setText("Go back to your previous position");
-        choice4.setText("Extinguish the fire");
+        theScenes.goToTheCandle();
+        updateScene();
     }
 
     public void pickUpTheCandle()
@@ -775,28 +776,19 @@ public class MyGuiTest extends JFrame{
         thePlayer.setPlayerItem("Candle");
         //this actually changes the current text to whatever we have it set with .setPlayerItem
         itemLabelName.setText(thePlayer.getPlayerItem());
-        thePlayer.setPlayerHP(2);
         candleEquipped = true;
         position = "pickUpTheCandle";
 
-        mainTextArea.setText("You picked up the candle. Now you can move the source of light around you, it will help you to see things more clearly.");
-        choice1.setText("Go to the wall");
-        choice2.setText("Go back to the previous position");
-        choice3.setText("Shout for help");
-        choice4.setText("Try to fall asleep");
+        theScenes.pickUpTheCandle();
+        updateScene();
     }
 
     public void goToTheLight()
     {
         position = "goToTheLight";
 
-        mainTextArea.setText("As you move closer to the light you realised that the light is actually coming out of an object " +
-                             "and the object reminds you of a candle.");
-
-        choice1.setText("Pick up the candle");
-        choice2.setText("Go back to the previous position");
-        choice3.setText("Shout for help");
-        choice4.setText("Try to fall asleep");
+        theScenes.goToTheLight();
+        updateScene();
     }
 
     public void shoutForHelp()
@@ -804,26 +796,16 @@ public class MyGuiTest extends JFrame{
 
         position = "shoutForHelp";
 
-        mainTextArea.setText("You scream out top of your lungs... No answer. Is anyone even here? As it seems" +
-                             "   you can only hear your dry voice echoing around the place...");
-
-        choice1.setText("Look around");
-        choice2.setText("Go to the light");
-        choice3.setText("------");
-        choice4.setText("Try to fall asleep");
+        theScenes.shoutForHelp();
+        updateScene();
     }
 
     public void tryToFallAsleep()
     {
         position = "tryToFallAsleep";
 
-        mainTextArea.setText("You walk to the nearest corner, lay down and close your eyes... 'Maybe this will help' " +
-                             " - you think to yourself. As easy it is to fall asleep in a cave, you just can't really do it. ");
-
-        choice1.setText("Look around");
-        choice2.setText("Go to the light");
-        choice3.setText("Shout for help");
-        choice4.setText("------");
+        theScenes.tryToFallAsleep();
+        updateScene();
     }
 
     public void goToTheWall()
@@ -831,13 +813,8 @@ public class MyGuiTest extends JFrame{
 
         position = "goToTheWall";
 
-        mainTextArea.setText("You move towards the wall. While you were looking at it for couple of minutes you realised that " +
-                " the 'inward' section of the wall was an actual wooden door. ");
-
-        choice1.setText("Knock on the door");
-        choice2.setText("Go back to the previous position");
-        choice3.setText("Try to open the door");
-        choice4.setText("------");
+        theScenes.goToTheWall();
+        updateScene();
 
     }
 
@@ -845,56 +822,35 @@ public class MyGuiTest extends JFrame{
     {
         position = "knockOnDoor";
 
-        mainTextArea.setText("You lift your hand towards the door and you give it few hard knocks... No answer... ");
-
-        choice1.setText("------");
-        choice2.setText("Go back to the previous position");
-        choice3.setText("Try to open the door");
-        choice4.setText("------");
+        theScenes.knockOnDoor();
+        updateScene();
     }
 
     public void openTheDoor()
     {
         position = "openTheDoor";
 
-        mainTextArea.setText("You extend your arms towards the door, you put your whole weight on it and try to push " +
-                             "The door makes a loud cranky noise and the door opens...");
-
-        choice1.setText("Enter");
-        choice2.setText("------");
-        choice3.setText("------");
-        choice4.setText("------");
+       theScenes.openTheDoor();
+       updateScene();
     }
 
     public void extinguishTheFire()
     {
         position = "extinguishFire";
 
-        mainTextArea.setText("You move the palm over the candle to put it out, you succeed but you lose some health and a light source." +
-                             " Why did you do that?");
+        thePlayer.setPlayerHP(playerHP - 5);
+        hpLabelNumber.setText("" + thePlayer.getPlayerHP());
 
-        playerHP = playerHP - 5;
-        hpLabelNumber.setText("" + playerHP);
-
-        choice1.setText("------");
-        choice2.setText("Go to the wall");
-        choice3.setText("Go back to your previous position");
-        choice4.setText("------");
+        theScenes.extinguishTheFire();
+        updateScene();
     }
 
     public void enterTheDoor()
     {
         position = "enterTheDoor";
 
-        mainTextArea.setText("You enter the room, this room is even smaller than the one you came from," +
-                             " you can see various objects around you, from table with chairs, fireplace, big wooden door, " +
-                             "and? what? you can't believe your eyes... Who is that?" +
-                             "\n\nGuard: You shouldn't suppouse to be here! Now you will have to pay.");
-
-        choice1.setText("Attack the guard");
-        choice2.setText("------");
-        choice3.setText("------");
-        choice4.setText("------");
+        theScenes.enterTheDoor();
+        updateScene();
     }
 
     public void attackTheGuard()
@@ -927,7 +883,7 @@ public class MyGuiTest extends JFrame{
 
         //this subtracts the enemyhealth depending on the number that we get in 'player attack'
         enemyHealth = enemyHealth - playerAttack;
-        playerHP = playerHP - enemyAttack;
+        thePlayer.setPlayerHP(playerHP - enemyAttack);
 
         //This if attacks additional 2 attack points to the player attack if the player currently
         //has a candle equipped (which can be eqquiped earlier in the game)
@@ -940,7 +896,7 @@ public class MyGuiTest extends JFrame{
                              +"\nAnd deals: " + enemyAttack + " damage.");
 
         //this updates the playerhealth.
-        hpLabelNumber.setText("" + playerHP);
+        hpLabelNumber.setText("" + thePlayer.getPlayerHP());
 
         choice1.setText("Attack the guard");
         choice2.setText("------");
@@ -953,7 +909,7 @@ public class MyGuiTest extends JFrame{
             guardKilled();
         }
         //if the player heal is below or equal to 0 it calls playerKilled method
-        else if(playerHP<=1)
+        else if(thePlayer.getPlayerHP()<=1)
         {
             playerKilled();
         }
@@ -963,13 +919,8 @@ public class MyGuiTest extends JFrame{
     {
         position = "guardKilled";
 
-        mainTextArea.setText("Guards current health: 0 " +
-                             "\nCongratulations! You've survived and killed the guard! \nWhat is your next move?");
-
-        choice1.setText("Search the guard");
-        choice2.setText("Go to the door and open it");
-        choice3.setText("------");
-        choice4.setText("------");
+        theScenes.guardKilled();
+        updateScene();
     }
 
     public void playerKilled()
@@ -978,15 +929,8 @@ public class MyGuiTest extends JFrame{
 
         thePlayer.setPlayerHP(playerHP);
 
-        mainTextArea.setText("Players current health: " + thePlayer.getPlayerHP() +
-                "\nIt seems that you've messed up, you might've died or your hp is too low " +
-                " to continue the fight..." +
-                "\n well its not that bad at it seems, it just that you will have to try again...");
-
-        choice1.setText("Go to the start");
-        choice2.setText("------");
-        choice3.setText("------");
-        choice4.setText("------");
+        theScenes.playerKilled();
+        updateScene();
     }
 
     public void searchTheGuard()
@@ -1000,13 +944,8 @@ public class MyGuiTest extends JFrame{
         candleEquipped = false;
         daggerEquipped = true;
 
-        mainTextArea.setText("You lowered your body towards the guard. He's dead. You decide to look through his items." +
-                             "You managed to find few items: A dagger, an apple and bunch of old keys.");
-
-        choice1.setText("Go to the metal door");
-        choice2.setText("Eat the apple");
-        choice3.setText("Equip the dagger");
-        choice4.setText("------");
+        theScenes.searchTheGuard();
+        updateScene();
     }
 
     public void goMetalDoor()
@@ -1017,24 +956,13 @@ public class MyGuiTest extends JFrame{
 
         if(keyAcquired)
         {
-            mainTextArea.setText("You walked to the door, it seems that it is locked. You remembered that you have bunch of old " +
-                                 "keys that you got from the guard. You spent 15 minutes trying every rusted key and eventually one of them " +
-                                 "worked. You put the key in, pushed right and the big metal door slowly opened...");
-
-            choice1.setText("Continue");
-            choice2.setText("------");
-            choice3.setText("------");
-            choice4.setText("------");
+           theScenes.goMetalDoorKeyEquipped();
+           updateScene();
         }
         else
         {
-            mainTextArea.setText("You tried to open the door. It didn't work, it seems that it is locked. " +
-                                 "You will have to find something to open the door with. Go back.");
-
-            choice1.setText("------");
-            choice2.setText("------");
-            choice3.setText("Go to previous position");
-            choice4.setText("Search the guard");
+            theScenes.goMetalDoorNoKey();
+            updateScene();
         }
     }
 
@@ -1043,18 +971,12 @@ public class MyGuiTest extends JFrame{
     {
         position = "eatTheApple";
 
-        mainTextArea.setText("You check the guards body and find an apple, maybe its still good, who knows, " +
-                            " but you eat it anyway. It is not much, but still better than nothing. " +
-                            "\n(+25 HEALTH)");
-
-        choice1.setText("Go to the metal door");
-        choice2.setText("------");
-        choice3.setText("Equip the dagger");
-        choice4.setText("------");
-
         appleGivenHealth = 35;
-        playerHP += appleGivenHealth;
-        hpLabelNumber.setText("" + playerHP);
+        thePlayer.setPlayerHP(playerHP += appleGivenHealth);
+        hpLabelNumber.setText("" + thePlayer.getPlayerHP());
+
+        theScenes.eatTheApple();
+        updateScene();
 
     }
 
@@ -1063,48 +985,29 @@ public class MyGuiTest extends JFrame{
 
         position = "equipDagger";
 
-        mainTextArea.setText("You check the guards body and find a dagger, it doesn't look sharp, but it is better than fighting with " + thePlayer.getPlayerItem() +
-                " So you decide to throw away your weapon and equip the new one. " +
-                "\n(+6 DAMAGE)");
-
         candleEquipped = false;
         itemsEquipped();
 
-        choice1.setText("Go to the metal door");
-        choice2.setText("------");
-        choice3.setText("------");
-        choice4.setText("------");
+        theScenes.equipDagger();
+        updateScene();
 
     }
 
     public void ContinueMetalDoor()
     {
         position = "enteringTown";
-
-        mainTextArea.setText("As you push the door open, you can finally start smelling something more than just wet mud and dirt." +
-                             "\nYou started to hear sounds again, see the sunshine in your eyes, but where are you?" +
-                             "\nThis place oddly reminds you of some kind of a market...");
-
         itemsEquipped();
 
-        choice1.setText("Continue");
-        choice2.setText("------");
-        choice3.setText("------");
-        choice4.setText("------");
-
+        theScenes.ContinueMetalDoor();
+        updateScene();
     }
 
     public void runFromAttack()
     {
         position = "runFromAttack";
 
-        mainTextArea.setText("You lowered your body towards the guard. He's dead. You decide to look through his items." +
-                "You managed to find few items: A dagger, an apple and bunch of old keys.");
-
-        choice1.setText("Go to the metal door");
-        choice2.setText("Eat the apple");
-        choice3.setText("Equip the dagger");
-        choice4.setText("------");
+        theScenes.runFromAttack();
+        updateScene();
     }
 
     public void enteringTheMarketScene()
@@ -1195,57 +1098,24 @@ public class MyGuiTest extends JFrame{
 
         position = "enteringTheMarket";
 
-        mainTextArea.setText("Finally, you've managed to escape that dirty place... " +
-                            "\nAs you look around, you realise that there is 2 paths that you can take." +
-                            "\nOne of the path is leading to the market" +
-                            "\nWhile other path is leading to the billboard.");
-
-        choice1.setText("Go to the market");
-        choice2.setText("Go to the billboard");
-        choice3.setText("------");
-        choice4.setText("------");
-    }
-
-    public void enteringTheTownPreviousPosition()
-    {
-        position = "enteringTheTownPreviousPosition";
-
-        mainTextArea.setText("Finally, you've managed to escape that dirty place... " +
-                "\nAs you look around, you realise that there is 2 paths that you can take." +
-                "\nOne of the path is leading to the market" +
-                "\nWhile other path is leading to the billboard.");
-
-        choice1.setText("Go to the market");
-        choice2.setText("Go to the billboard");
-        choice3.setText("------");
-        choice4.setText("------");
+        theScenes.enteringTheMarketScene();
+        updateScene();
     }
 
     public void marketPlace()
     {
         position = "marketPlace";
 
-        mainTextArea.setText("You started to walk to the market place, you can see different types of shops that sell different kind of stuff." +
-                             "\nWhat would you like to do?");
-
-        choice1.setText("Buy items");
-        choice2.setText("Sell items");
-        choice3.setText("Check the prices");
-        choice4.setText("Go back to the town");
+        theScenes.marketPlace();
+        updateScene();
     }
 
     public void billBoardDuels()
     {
         position = "billBoardDuels";
 
-        mainTextArea.setText("You reached the billboard. Right in front of you, you can see different type of ads. " +
-                             "\nSome are looking for a chef, new butcher or a cleaner. But one of the ads gets your attention." +
-                             "\nDUEL ARENA - TEST YOUR SKILLS AGAINST CHALLENGING ENEMIES AND GET SWEET REWARDS!");
-
-        choice1.setText("Enter the duel arena");
-        choice2.setText("Go back to the town");
-        choice3.setText("------");
-        choice4.setText("------");
+        theScenes.billBoardDuels();
+        updateScene();
     }
 
     public void buyingItems()
@@ -1323,6 +1193,8 @@ public class MyGuiTest extends JFrame{
 
 
 
+
+    //===============Shop system================
 
     public static void itemsToBuy1(int itemsToBuy, int playerMoney, int firstItemRandomPrice, int firstItemRandomDamage, String[] differentItemCombinations)
     {
@@ -1431,6 +1303,8 @@ public class MyGuiTest extends JFrame{
 
     }
 
+    //Fighting system
+
     public void enterTheDuels()
     {
 
@@ -1447,23 +1321,28 @@ public class MyGuiTest extends JFrame{
 
     public void textColourChanger() {
         if (textColourCount == 1) {
+            container.setForeground(Color.white);
             mainTextArea.setForeground(Color.white);
             mainTextPanel.setForeground(Color.white);
             titleNameLabel.setForeground(Color.WHITE);
         } else if (textColourCount == 2) {
+            container.setForeground(Color.orange);
             mainTextArea.setForeground(Color.orange);
             mainTextPanel.setForeground(Color.orange);
             titleNameLabel.setForeground(Color.orange);
             container.setForeground(Color.orange);
         } else if (textColourCount == 3) {
+            container.setForeground(Color.pink);
             mainTextArea.setForeground(Color.pink);
             mainTextPanel.setForeground(Color.pink);
             titleNameLabel.setForeground(Color.pink);
         } else if (textColourCount == 4) {
+            container.setForeground(Color.green);
             mainTextArea.setForeground(Color.green);
             mainTextPanel.setForeground(Color.green);
             titleNameLabel.setForeground(Color.green);
         } else if (textColourCount == 5) {
+            container.setForeground(Color.cyan);
             mainTextArea.setForeground(Color.cyan);
             mainTextPanel.setForeground(Color.cyan);
             titleNameLabel.setForeground(Color.cyan);
@@ -1645,6 +1524,8 @@ public class MyGuiTest extends JFrame{
         }
     }
 
+
+    //==========CHOICE HANDLER========================
     public class ChoiceHandler implements ActionListener
     {
         public void actionPerformed(ActionEvent event)
@@ -1860,14 +1741,14 @@ public class MyGuiTest extends JFrame{
                         case "c1": buyingItems();break;
                         case "c2": sellingItems();break;
                         case "c3": checkThePrices();break;
-                        case "c4": enteringTheTownPreviousPosition();break;
+                        case "c4": enteringTheMarketScene();break;
                     }
                     break;
                 case "billBoardDuels":
                     switch(yourChoice)
                     {
                         case "c1": enterTheDuels();break;
-                        case "c2": enteringTheTownPreviousPosition();break;
+                        case "c2": enteringTheMarketScene();break;
                         case "c3": break;
                         case "c4": break;
                     }
