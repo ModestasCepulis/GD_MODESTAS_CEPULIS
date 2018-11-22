@@ -14,6 +14,7 @@ public class MyGuiTest extends JFrame{
 
 
     static Player thePlayer;
+    static shopTest theShop;
 
     Container container;
 
@@ -46,6 +47,9 @@ public class MyGuiTest extends JFrame{
 
     //=========Health items============
     int appleGivenHealth;
+
+    //=========shop==================
+    int playerMoney=100;
 
     marketContinueHandler marketContinueHdrl = new marketContinueHandler();
 
@@ -82,6 +86,7 @@ public class MyGuiTest extends JFrame{
     public static void main(String[] args) {
 
         thePlayer = new Player();
+        theShop = new shopTest();
         new MyGuiTest();
     }
 
@@ -646,7 +651,7 @@ public class MyGuiTest extends JFrame{
         marketLabel = new JLabel(marketImage);
 
         marketPanel = new JPanel();
-        marketPanel.setBounds(200, 100, 750, 500);
+        marketPanel.setBounds(200, 100, 750, 450);
         marketPanel.setBackground(Color.black);
         marketPanel.add(marketLabel);
 
@@ -1074,7 +1079,7 @@ public class MyGuiTest extends JFrame{
 
     public void ContinueMetalDoor()
     {
-        position = "enteringMarket";
+        position = "enteringTown";
 
         mainTextArea.setText("As you push the door open, you can finally start smelling something more than just wet mud and dirt." +
                              "\nYou started to hear sounds again, see the sunshine in your eyes, but where are you?" +
@@ -1100,6 +1105,340 @@ public class MyGuiTest extends JFrame{
         choice2.setText("Eat the apple");
         choice3.setText("Equip the dagger");
         choice4.setText("------");
+    }
+
+    public void enteringTheMarketScene()
+    {
+
+        mainTextPanel.setVisible(false);
+        mainTextArea.setVisible(false);
+        disableAllPanels();
+        mainTextPanel();
+        mainTextArea();
+
+        mainTextArea.setForeground(Color.white);
+        mainTextPanel.setBackground(Color.RED);
+        mainTextPanel.setBounds(100,100,1000,200);
+
+        choiceButtonPanel = new JPanel();
+        choiceButtonPanel.setBounds(350, 350, 500, 150);
+        choiceButtonPanel.setBackground(Color.darkGray);
+        //new GridLayout allows to change the layout of the buttons
+        //code reference taken from:
+        //https://docs.oracle.com/javase/7/docs/api/java/awt/GridLayout.html
+        choiceButtonPanel.setLayout(new GridLayout(4, 1));
+        container.add(choiceButtonPanel);
+
+        choice1 = new JButton("Choice 1");
+        choice1.setBackground(Color.darkGray);
+        choice1.setForeground(Color.white);
+        choice1.setFont(mainFont);
+        choiceButtonPanel.add(choice1);
+        choice1.setFocusPainted(false);
+        choice1.addActionListener(choiceHdlr);
+        choice1.setActionCommand("c1");
+
+        choice2 = new JButton("Choice 2");
+        choice2.setBackground(Color.darkGray);
+        choice2.setForeground(Color.white);
+        choice2.setFont(mainFont);
+        choiceButtonPanel.add(choice2);
+        choice2.setFocusPainted(false);
+        choice2.addActionListener(choiceHdlr);
+        choice2.setActionCommand("c2");
+
+        choice3 = new JButton("Choice 3");
+        choice3.setBackground(Color.darkGray);
+        choice3.setForeground(Color.white);
+        choice3.setFont(mainFont);
+        choiceButtonPanel.add(choice3);
+        choice3.setFocusPainted(false);
+        choice3.addActionListener(choiceHdlr);
+        choice3.setActionCommand("c3");
+
+        choice4 = new JButton("Choice 4");
+        choice4.setBackground(Color.darkGray);
+        choice4.setForeground(Color.white);
+        choice4.setFont(mainFont);
+        choiceButtonPanel.add(choice4);
+        choice4.setFocusPainted(false);
+        choice4.addActionListener(choiceHdlr);
+        choice4.setActionCommand("c4");
+
+        playerPanel = new JPanel();
+        playerPanel.setBounds(100, 15, 1000, 50);
+        playerPanel.setBackground(Color.darkGray);
+        playerPanel.setLayout(new GridLayout(1, 4));
+        container.add(playerPanel);
+
+        hpLabel = new JLabel("Health: ");
+        hpLabel.setFont(mainFont);
+        hpLabel.setForeground(Color.WHITE);
+        playerPanel.add(hpLabel);
+
+        hpLabelNumber = new JLabel();
+        hpLabelNumber.setFont(mainFont);
+        hpLabelNumber.setForeground(Color.white);
+        playerPanel.add(hpLabelNumber);
+
+        itemLabel = new JLabel("Item: ");
+        itemLabel.setFont(mainFont);
+        itemLabel.setForeground(Color.white);
+        playerPanel.add(itemLabel);
+
+        itemLabelName = new JLabel();
+        itemLabelName.setFont(mainFont);
+        itemLabelName.setForeground(Color.white);
+        playerPanel.add(itemLabelName);
+
+        playerSetup();
+
+        position = "enteringTheMarket";
+
+        mainTextArea.setText("Finally, you've managed to escape that dirty place... " +
+                            "\nAs you look around, you realise that there is 2 paths that you can take." +
+                            "\nOne of the path is leading to the market" +
+                            "\nWhile other path is leading to the billboard.");
+
+        choice1.setText("Go to the market");
+        choice2.setText("Go to the billboard");
+        choice3.setText("------");
+        choice4.setText("------");
+    }
+
+    public void enteringTheTownPreviousPosition()
+    {
+        position = "enteringTheTownPreviousPosition";
+
+        mainTextArea.setText("Finally, you've managed to escape that dirty place... " +
+                "\nAs you look around, you realise that there is 2 paths that you can take." +
+                "\nOne of the path is leading to the market" +
+                "\nWhile other path is leading to the billboard.");
+
+        choice1.setText("Go to the market");
+        choice2.setText("Go to the billboard");
+        choice3.setText("------");
+        choice4.setText("------");
+    }
+
+    public void marketPlace()
+    {
+        position = "marketPlace";
+
+        mainTextArea.setText("You started to walk to the market place, you can see different types of shops that sell different kind of stuff." +
+                             "\nWhat would you like to do?");
+
+        choice1.setText("Buy items");
+        choice2.setText("Sell items");
+        choice3.setText("Check the prices");
+        choice4.setText("Go back to the town");
+    }
+
+    public void billBoardDuels()
+    {
+        position = "billBoardDuels";
+
+        mainTextArea.setText("You reached the billboard. Right in front of you, you can see different type of ads. " +
+                             "\nSome are looking for a chef, new butcher or a cleaner. But one of the ads gets your attention." +
+                             "\nDUEL ARENA - TEST YOUR SKILLS AGAINST CHALLENGING ENEMIES AND GET SWEET REWARDS!");
+
+        choice1.setText("Enter the duel arena");
+        choice2.setText("Go back to the town");
+        choice3.setText("------");
+        choice4.setText("------");
+    }
+
+    public void buyingItems()
+    {
+
+        int itemsToBuy = 0;
+
+        String itemsToBuyAsString;
+
+
+
+        //This is an array of strings that has a word which will be connected with the second array
+        String[] itemListFirstWord = new String[7];
+        itemListFirstWord[0] = "Wooden ";
+        itemListFirstWord[1] = "Rubber " ;
+        itemListFirstWord[2] = "Metal ";
+        itemListFirstWord[3] = "Spiky ";
+        itemListFirstWord[4] = "Sharpened ";
+        itemListFirstWord[5] = "Slimy ";
+        itemListFirstWord[6] = "Oily ";
+
+        //this is the second word array, which takes the first array string and makes a weapon name out of it
+        String[] itemListSecondWord = new String[7];
+        itemListSecondWord[0] = "Sword";
+        itemListSecondWord[1] = "Scissors" ;
+        itemListSecondWord[2] = "Daggers";
+        itemListSecondWord[3] = "Rod";
+        itemListSecondWord[4] = "Spear";
+        itemListSecondWord[5] = "Longsword";
+        itemListSecondWord[6] = "Axe";
+
+
+        String firstWordOfItem = itemListFirstWord[(int) (Math.random() * ((6) + 1))];
+        String secondWordOfItem = itemListSecondWord[(int) (Math.random() * ((6) + 1))];
+
+
+        //its an array of different word combinations which make the name of the weapon.
+        String[] differentItemCombinations = new String[4];
+        differentItemCombinations[0] = firstWordOfItem + secondWordOfItem;
+        differentItemCombinations[1] = itemListFirstWord[(int) (Math.random() * ((6) + 1))] + itemListSecondWord[(int) (Math.random() * ((6) + 1))];
+        differentItemCombinations[2] = itemListFirstWord[(int) (Math.random() * ((5) + 2))] + itemListSecondWord[(int) (Math.random() * ((5) + 2))];
+        differentItemCombinations[3] = itemListFirstWord[(int) (Math.random() * ((4) + 3))] + itemListSecondWord[(int) (Math.random() * ((4) + 3))];
+
+        //this sets the random int numbers to random prices and random damages
+        int firstItemRandomPrice = (int) (Math.random() *((2) + 5) + 2);
+        int firstItemRandomDamage = (int) (Math.random() *((2) + 5) + 3);
+
+        int secondItemRandomPrice = (int) (Math.random() *((2) + 5) + 4);
+        int secondItemRandomDamage = (int) (Math.random() *((2) + 5) + 5);
+
+        int thirdItemRandomPrice = (int) (Math.random() *((2) + 5) + 6);
+        int thirdItemRandomDamage = (int) (Math.random() *((2) + 5) + 7);
+
+        int fourthItemRandomPrice = (int) (Math.random() *((2) + 5) + 8);
+        int fourthItemRandomDamage = (int) (Math.random() *((2) + 5) + 9);
+
+
+
+        //this just shows the output.
+        itemsToBuyAsString = JOptionPane.showInputDialog("\nPlease choose what kind of items you would like to buy." +
+                "\n1. " + differentItemCombinations[0] + " Price(" + firstItemRandomPrice + ")" + " Damage(" + firstItemRandomDamage + ")" +
+                "\n2. " + differentItemCombinations[1] + " Price(" + secondItemRandomPrice + ")" + " Damage(" + secondItemRandomDamage + ")" +
+                "\n3. " + differentItemCombinations[2] + " Price(" + thirdItemRandomPrice + ")" + " Damage(" + thirdItemRandomDamage + ")" +
+                "\n4. " + differentItemCombinations[3] + " Price(" + fourthItemRandomPrice + ")" + " Damage(" + fourthItemRandomDamage + ")" +
+                "\n5. Exit");
+        itemsToBuy = Integer.parseInt(itemsToBuyAsString);
+
+        //this calls the methods and puts the required values in
+        itemsToBuy1(itemsToBuy, playerMoney, firstItemRandomPrice, firstItemRandomDamage, differentItemCombinations);
+        itemsToBuy2(itemsToBuy, playerMoney, secondItemRandomPrice, secondItemRandomDamage, differentItemCombinations);
+        itemsToBuy3(itemsToBuy, playerMoney, thirdItemRandomPrice, thirdItemRandomDamage, differentItemCombinations);
+        itemsToBuy4(itemsToBuy, playerMoney, fourthItemRandomPrice, fourthItemRandomDamage, differentItemCombinations);
+        exitPhase(itemsToBuy);
+    }
+
+
+
+
+    public static void itemsToBuy1(int itemsToBuy, int playerMoney, int firstItemRandomPrice, int firstItemRandomDamage, String[] differentItemCombinations)
+    {
+        if (itemsToBuy == 1) {
+            if (playerMoney > firstItemRandomPrice) {
+
+                //this adds the damage to the player stats
+
+                JOptionPane.showMessageDialog(null, "Congratulations, you just bought: " + differentItemCombinations[0]
+                        + "\nThe Item cost you: " + firstItemRandomPrice + " gold."
+                        + "\nYou get additional: " + firstItemRandomDamage + " Damage."
+                        + "\nYour current money status is: " + playerMoney);
+
+                //this takes away the money required to buy the item.
+                playerMoney -= firstItemRandomPrice;
+
+            }
+            if (playerMoney < firstItemRandomPrice) {
+                JOptionPane.showMessageDialog(null, "Sorry, but you don't have enough money, you should go back to the arena and earn more!");
+            }
+
+        }
+    }
+
+    public static void itemsToBuy2(int itemsToBuy, int playerMoney, int secondItemRandomPrice, int secondItemRandomDamage, String[] differentItemCombinations)
+    {
+        if (itemsToBuy == 2) {
+            if (playerMoney > secondItemRandomPrice) {
+
+                //this takes away the money required to buy the item.
+                playerMoney = playerMoney - secondItemRandomPrice;
+
+                //this adds the damage to the player stats
+
+                JOptionPane.showMessageDialog(null, "Congratulations, you just bought: " + differentItemCombinations[1]
+                        + "\nThe Item cost you: " + secondItemRandomPrice + " gold."
+                        + "\nYou get additional: " + secondItemRandomDamage + " Damage."
+                        + "\nYour current money status: " + playerMoney);
+
+            }
+            if (playerMoney < secondItemRandomPrice) {
+                JOptionPane.showMessageDialog(null, "Sorry, but you don't have enough money, you should go back to the arena and earn more!");
+            }
+
+        }
+    }
+
+    public static void itemsToBuy3(int itemsToBuy, int playerMoney, int thirdItemRandomPrice, int thirdItemRandomDamage, String[] differentItemCombinations)
+    {
+        if (itemsToBuy == 3) {
+            if (playerMoney > thirdItemRandomPrice) {
+
+                //this takes away the money required to buy the item.
+                playerMoney = playerMoney - thirdItemRandomPrice;
+
+                //this adds the damage to the player stats
+
+                JOptionPane.showMessageDialog(null, "Congratulations, you just bought: " + differentItemCombinations[2]
+                        + "\nThe Item only cost you: " + thirdItemRandomPrice + " gold."
+                        + "\nYou get additional: " + thirdItemRandomDamage + " Damage."
+                        + "\nYour current money status: " + playerMoney);
+
+            }
+            if (playerMoney < thirdItemRandomPrice) {
+                JOptionPane.showMessageDialog(null, "Sorry, but you don't have enough money, you should go back to the arena and earn more!");
+            }
+
+        }
+    }
+
+    public static void itemsToBuy4(int itemsToBuy, int playerMoney, int fourthItemRandomPrice, int fourthItemRandomDamage, String[] differentItemCombinations)
+    {
+        if (itemsToBuy == 4) {
+            if (playerMoney > fourthItemRandomPrice) {
+
+                //this takes away the money required to buy the item.
+                playerMoney = playerMoney - fourthItemRandomPrice;
+
+                //this adds the damage to the player stats
+
+                JOptionPane.showMessageDialog(null, "Congratulations, you just bought: " + differentItemCombinations[3]
+                        + "\nThe Item only cost you: " + fourthItemRandomPrice + " gold."
+                        + "\nYou get additional: " + fourthItemRandomDamage + " Damage."
+                        + "\nYour current money status: " + playerMoney);
+
+            }
+            if (playerMoney < fourthItemRandomPrice) {
+                JOptionPane.showMessageDialog(null, "Sorry, but you don't have enough money, you should go back to the arena and earn more!");
+            }
+
+        }
+    }
+
+    public static void exitPhase(int itemsToBuy)
+    {
+        if(itemsToBuy == 5)
+        {
+            JOptionPane.showMessageDialog(null,"Thank you for using the market traveler. Bye now.");
+        }
+
+    }
+
+
+    public void sellingItems()
+    {
+
+    }
+
+    public void enterTheDuels()
+    {
+
+    }
+
+    public void checkThePrices()
+    {
+
     }
 
 
@@ -1268,6 +1607,8 @@ public class MyGuiTest extends JFrame{
         {
             marketPanel.setVisible(false);
             marketButtonPanel.setVisible(false);
+
+            enteringTheMarketScene();
         }
     }
 
@@ -1495,11 +1836,47 @@ public class MyGuiTest extends JFrame{
                         case "c4": break;
                     }
                     break;
-                case "enteringMarket":
+                case "enteringTown":
                     switch(yourChoice)
                     {
                         case "c1": marketScene();break;
                         case "c2": break;
+                        case "c3": break;
+                        case "c4": break;
+                    }
+                    break;
+                case "enteringTheMarket":
+                    switch(yourChoice)
+                    {
+                        case "c1": marketPlace();break;
+                        case "c2": billBoardDuels();break;
+                        case "c3": break;
+                        case "c4": break;
+                    }
+                    break;
+                case "marketPlace":
+                    switch(yourChoice)
+                    {
+                        case "c1": buyingItems();break;
+                        case "c2": sellingItems();break;
+                        case "c3": checkThePrices();break;
+                        case "c4": enteringTheTownPreviousPosition();break;
+                    }
+                    break;
+                case "billBoardDuels":
+                    switch(yourChoice)
+                    {
+                        case "c1": enterTheDuels();break;
+                        case "c2": enteringTheTownPreviousPosition();break;
+                        case "c3": break;
+                        case "c4": break;
+                    }
+                    break;
+                case "enteringTheTownPreviousPosition":
+                    switch(yourChoice)
+                    {
+                        case "c1": enteringTheMarketScene();break;
+                        case "c2": billBoardDuels();break;
                         case "c3": break;
                         case "c4": break;
                     }
