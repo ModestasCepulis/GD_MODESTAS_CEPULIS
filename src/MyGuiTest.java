@@ -50,7 +50,11 @@ public class MyGuiTest extends JFrame{
     int appleGivenHealth;
 
     //=========shop==================
-    int playerMoney=100;
+
+    int firstItemRandomPrice;
+    int secondItemRandomPrice;
+    int thirdItemRandomPrice;
+    int fourthItemRandomPrice;
 
     marketContinueHandler marketContinueHdrl = new marketContinueHandler();
 
@@ -76,7 +80,7 @@ public class MyGuiTest extends JFrame{
     int playerHP;
     int textColourCount = 1, backgroundColourCount = 1;
     int enemyHealth = 20;
-    int playerAttack, enemyAttack;
+    int enemyAttack;
     int candleAdditionalDamage, daggerAdditionalDamage;
 
     String position;
@@ -158,12 +162,9 @@ public class MyGuiTest extends JFrame{
     //===================PLAYER SETUP=====================
 
     public void playerSetup() {
-        playerHP = thePlayer.getPlayerHP(); //gets the player hp from the 'Player' class.
-
-        thePlayer.getPlayerItem(); //default player item
-
         itemLabelName.setText(thePlayer.getPlayerItem());
-        hpLabelNumber.setText("" + playerHP);
+        hpLabelNumber.setText("" + thePlayer.getPlayerHP());
+        thePlayer.setPlayerMoney(100);
         firstLaunchScene();
     }
 
@@ -177,12 +178,12 @@ public class MyGuiTest extends JFrame{
         //checks if the candle is equipped.
         if(candleEquipped)
         {
-            playerAttack += candleAdditionalDamage;
+            thePlayer.setPlayerAttack(thePlayer.playerAttack + candleAdditionalDamage);
         }
 
         if(daggerEquipped)
         {
-            playerAttack += daggerAdditionalDamage;
+            thePlayer.setPlayerAttack(thePlayer.playerAttack + daggerAdditionalDamage);
             thePlayer.setPlayerItem("Dagger");
             //this actually changes the current text to whatever we have it set with .setPlayerItem
             itemLabelName.setText(thePlayer.getPlayerItem());
@@ -371,7 +372,7 @@ public class MyGuiTest extends JFrame{
         mainTextPanel();
         mainTextArea();
 
-        thePlayer.setPlayerHP(25);
+        thePlayer.setPlayerHP(thePlayer.playerHP = 25);
         thePlayer.setPlayerItem("Fists");
 
         mainTextArea.setForeground(Color.white);
@@ -641,13 +642,13 @@ public class MyGuiTest extends JFrame{
 
     public void marketScene()
     {
+        playerPanel.setVisible(false);
         mainTextPanel.setVisible(false);
         ContinueButtonPanel.setVisible(false);
         choice1.setVisible(false);
         choice2.setVisible(false);
         choice3.setVisible(false);
         choice4.setVisible(false);
-        playerPanel.setVisible(false);
 
         marketImage = new ImageIcon(getClass().getResource("Images/marketImage.gif"));
         marketLabel = new JLabel(marketImage);
@@ -871,7 +872,7 @@ public class MyGuiTest extends JFrame{
 
 
         //this gets a random number and sets it as player attack power.
-        playerAttack = (int) (Math.random() * ((5) + 2));
+        thePlayer.setPlayerAttack((int) (Math.random() * ((5) + 2)));
         //this gets a random number and sets it as enemy attack power.
         enemyAttack = (int) (Math.random() * ((5) + 2));
 
@@ -882,15 +883,15 @@ public class MyGuiTest extends JFrame{
         String enemyWeapon = enemyWeapons[(int)(Math.random() * ((4) + 1))];
 
         //this subtracts the enemyhealth depending on the number that we get in 'player attack'
-        enemyHealth = enemyHealth - playerAttack;
-        thePlayer.setPlayerHP(playerHP - enemyAttack);
+        enemyHealth = enemyHealth - thePlayer.getPlayerAttack();
+        thePlayer.setPlayerHP(thePlayer.playerHP - enemyAttack);
 
         //This if attacks additional 2 attack points to the player attack if the player currently
         //has a candle equipped (which can be eqquiped earlier in the game)
 
-        System.out.print("\nPlayer attack damage:" + playerAttack);
+        System.out.print("\nPlayer attack damage:" + thePlayer.getPlayerAttack());
         mainTextArea.setText("You attack the guard with: " + thePlayer.getPlayerItem() +
-                             " and do: " + playerAttack + " damage."
+                             " and do: " + thePlayer.getPlayerAttack() + " damage."
                              +"\nGuards current health: " + enemyHealth
                              +"\n\nThe guard attacks you with: " + enemyWeapon
                              +"\nAnd deals: " + enemyAttack + " damage.");
@@ -927,22 +928,30 @@ public class MyGuiTest extends JFrame{
     {
         position = "playerKilled";
 
-        thePlayer.setPlayerHP(playerHP);
+        thePlayer.setPlayerHP(thePlayer.playerHP = 25);
 
         theScenes.playerKilled();
         updateScene();
+    }
+
+    public void duelEnemyKilled(int firstItemRandomPrice)
+    {
+        position = "duelEnemyKilled";
+
+        thePlayer.setPlayerHP(thePlayer.playerHP = 25);
+
+        theScenes.duelEnemyKilled();
+        updateScene();
+
+        JOptionPane.showMessageDialog(null,"You have received " + firstItemRandomPrice + " gold!");
+        thePlayer.setPlayerMoney(thePlayer.playerMoney + firstItemRandomPrice);
     }
 
     public void searchTheGuard()
     {
         position = "searchTheGuard";
 
-        //this checks if the items are equipped, and if they are the system gives the additional buffs to the player.
-        itemsEquipped();
-
         keyAcquired = true;
-        candleEquipped = false;
-        daggerEquipped = true;
 
         theScenes.searchTheGuard();
         updateScene();
@@ -971,8 +980,9 @@ public class MyGuiTest extends JFrame{
     {
         position = "eatTheApple";
 
+
         appleGivenHealth = 35;
-        thePlayer.setPlayerHP(playerHP += appleGivenHealth);
+        thePlayer.setPlayerHP(thePlayer.playerHP += appleGivenHealth);
         hpLabelNumber.setText("" + thePlayer.getPlayerHP());
 
         theScenes.eatTheApple();
@@ -986,6 +996,7 @@ public class MyGuiTest extends JFrame{
         position = "equipDagger";
 
         candleEquipped = false;
+        daggerEquipped = true;
         itemsEquipped();
 
         theScenes.equipDagger();
@@ -1013,90 +1024,14 @@ public class MyGuiTest extends JFrame{
     public void enteringTheMarketScene()
     {
 
-        mainTextPanel.setVisible(false);
-        mainTextArea.setVisible(false);
-        disableAllPanels();
-        mainTextPanel();
-        mainTextArea();
-
-        mainTextArea.setForeground(Color.white);
-        mainTextPanel.setBackground(Color.RED);
-        mainTextPanel.setBounds(100,100,1000,200);
-
-        choiceButtonPanel = new JPanel();
-        choiceButtonPanel.setBounds(350, 350, 500, 150);
-        choiceButtonPanel.setBackground(Color.darkGray);
-        //new GridLayout allows to change the layout of the buttons
-        //code reference taken from:
-        //https://docs.oracle.com/javase/7/docs/api/java/awt/GridLayout.html
-        choiceButtonPanel.setLayout(new GridLayout(4, 1));
-        container.add(choiceButtonPanel);
-
-        choice1 = new JButton("Choice 1");
-        choice1.setBackground(Color.darkGray);
-        choice1.setForeground(Color.white);
-        choice1.setFont(mainFont);
-        choiceButtonPanel.add(choice1);
-        choice1.setFocusPainted(false);
-        choice1.addActionListener(choiceHdlr);
-        choice1.setActionCommand("c1");
-
-        choice2 = new JButton("Choice 2");
-        choice2.setBackground(Color.darkGray);
-        choice2.setForeground(Color.white);
-        choice2.setFont(mainFont);
-        choiceButtonPanel.add(choice2);
-        choice2.setFocusPainted(false);
-        choice2.addActionListener(choiceHdlr);
-        choice2.setActionCommand("c2");
-
-        choice3 = new JButton("Choice 3");
-        choice3.setBackground(Color.darkGray);
-        choice3.setForeground(Color.white);
-        choice3.setFont(mainFont);
-        choiceButtonPanel.add(choice3);
-        choice3.setFocusPainted(false);
-        choice3.addActionListener(choiceHdlr);
-        choice3.setActionCommand("c3");
-
-        choice4 = new JButton("Choice 4");
-        choice4.setBackground(Color.darkGray);
-        choice4.setForeground(Color.white);
-        choice4.setFont(mainFont);
-        choiceButtonPanel.add(choice4);
-        choice4.setFocusPainted(false);
-        choice4.addActionListener(choiceHdlr);
-        choice4.setActionCommand("c4");
-
-        playerPanel = new JPanel();
-        playerPanel.setBounds(100, 15, 1000, 50);
-        playerPanel.setBackground(Color.darkGray);
-        playerPanel.setLayout(new GridLayout(1, 4));
-        container.add(playerPanel);
-
-        hpLabel = new JLabel("Health: ");
-        hpLabel.setFont(mainFont);
-        hpLabel.setForeground(Color.WHITE);
-        playerPanel.add(hpLabel);
-
-        hpLabelNumber = new JLabel();
-        hpLabelNumber.setFont(mainFont);
-        hpLabelNumber.setForeground(Color.white);
-        playerPanel.add(hpLabelNumber);
-
-        itemLabel = new JLabel("Item: ");
-        itemLabel.setFont(mainFont);
-        itemLabel.setForeground(Color.white);
-        playerPanel.add(itemLabel);
-
-        itemLabelName = new JLabel();
-        itemLabelName.setFont(mainFont);
-        itemLabelName.setForeground(Color.white);
-        playerPanel.add(itemLabelName);
-
-        playerSetup();
-
         position = "enteringTheMarket";
+
+        playerPanel.setVisible(true);
+        mainTextPanel.setVisible(true);
+        choice1.setVisible(true);
+        choice2.setVisible(true);
+        choice3.setVisible(true);
+        choice4.setVisible(true);
 
         theScenes.enteringTheMarketScene();
         updateScene();
@@ -1160,16 +1095,16 @@ public class MyGuiTest extends JFrame{
         differentItemCombinations[3] = itemListFirstWord[(int) (Math.random() * ((4) + 3))] + itemListSecondWord[(int) (Math.random() * ((4) + 3))];
 
         //this sets the random int numbers to random prices and random damages
-        int firstItemRandomPrice = (int) (Math.random() *((2) + 5) + 2);
+        firstItemRandomPrice = (int) (Math.random() *((2) + 5) + 2);
         int firstItemRandomDamage = (int) (Math.random() *((2) + 5) + 3);
 
-        int secondItemRandomPrice = (int) (Math.random() *((2) + 5) + 4);
+        secondItemRandomPrice = (int) (Math.random() *((2) + 5) + 4);
         int secondItemRandomDamage = (int) (Math.random() *((2) + 5) + 5);
 
-        int thirdItemRandomPrice = (int) (Math.random() *((2) + 5) + 6);
+        thirdItemRandomPrice = (int) (Math.random() *((2) + 5) + 6);
         int thirdItemRandomDamage = (int) (Math.random() *((2) + 5) + 7);
 
-        int fourthItemRandomPrice = (int) (Math.random() *((2) + 5) + 8);
+        fourthItemRandomPrice = (int) (Math.random() *((2) + 5) + 8);
         int fourthItemRandomDamage = (int) (Math.random() *((2) + 5) + 9);
 
 
@@ -1184,108 +1119,166 @@ public class MyGuiTest extends JFrame{
         itemsToBuy = Integer.parseInt(itemsToBuyAsString);
 
         //this calls the methods and puts the required values in
-        itemsToBuy1(itemsToBuy, playerMoney, firstItemRandomPrice, firstItemRandomDamage, differentItemCombinations);
-        itemsToBuy2(itemsToBuy, playerMoney, secondItemRandomPrice, secondItemRandomDamage, differentItemCombinations);
-        itemsToBuy3(itemsToBuy, playerMoney, thirdItemRandomPrice, thirdItemRandomDamage, differentItemCombinations);
-        itemsToBuy4(itemsToBuy, playerMoney, fourthItemRandomPrice, fourthItemRandomDamage, differentItemCombinations);
+        itemsToBuy1(itemsToBuy, firstItemRandomPrice, firstItemRandomDamage, differentItemCombinations);
+        itemsToBuy2(itemsToBuy, secondItemRandomPrice, secondItemRandomDamage, differentItemCombinations);
+        itemsToBuy3(itemsToBuy, thirdItemRandomPrice, thirdItemRandomDamage, differentItemCombinations);
+        itemsToBuy4(itemsToBuy, fourthItemRandomPrice, fourthItemRandomDamage, differentItemCombinations);
         exitPhase(itemsToBuy);
     }
 
 
 
 
+
+
     //===============Shop system================
 
-    public static void itemsToBuy1(int itemsToBuy, int playerMoney, int firstItemRandomPrice, int firstItemRandomDamage, String[] differentItemCombinations)
+    public void itemsToBuy1(int itemsToBuy, int firstItemRandomPrice, int firstItemRandomDamage, String[] differentItemCombinations)
     {
-        if (itemsToBuy == 1) {
-            if (playerMoney > firstItemRandomPrice) {
 
-                //this adds the damage to the player stats
+        if(itemsToBuy == 1 || itemsToBuy == 2 || itemsToBuy == 3 || itemsToBuy == 4 || itemsToBuy == 5)
+        {
+            if (itemsToBuy == 1) {
+                if (thePlayer.getPlayerMoney()> firstItemRandomPrice) {
 
-                JOptionPane.showMessageDialog(null, "Congratulations, you just bought: " + differentItemCombinations[0]
-                        + "\nThe Item cost you: " + firstItemRandomPrice + " gold."
-                        + "\nYou get additional: " + firstItemRandomDamage + " Damage."
-                        + "\nYour current money status is: " + playerMoney);
+                    //this takes away the money required to buy the item.
+                    thePlayer.setPlayerMoney(thePlayer.getPlayerMoney() - firstItemRandomPrice);
 
-                //this takes away the money required to buy the item.
-                playerMoney -= firstItemRandomPrice;
+                    thePlayer.setPlayerItem(differentItemCombinations[0]);
+                    //this actually changes the current text to whatever we have it set with .setPlayerItem
+                    itemLabelName.setText(thePlayer.getPlayerItem());
+
+                    //this sets the additional attack that the player gets
+
+                    thePlayer.setPlayerAttack((int) (Math.random() * ((5) + 2)) + firstItemRandomDamage);
+
+                    //this adds the damage to the player stats
+
+                    JOptionPane.showMessageDialog(null, "Congratulations, you just bought: " + differentItemCombinations[0]
+                            + "\nThe Item cost you: " + firstItemRandomPrice + " gold."
+                            + "\nYou get additional: " + firstItemRandomDamage + " Damage."
+
+                            + "\nYour current money status is: " + thePlayer.getPlayerMoney());
+
+
+                }
+                if (thePlayer.getPlayerMoney() < firstItemRandomPrice) {
+                    JOptionPane.showMessageDialog(null, "Sorry, but you don't have enough money, you should go back to the arena and earn more!");
+                }
 
             }
-            if (playerMoney < firstItemRandomPrice) {
-                JOptionPane.showMessageDialog(null, "Sorry, but you don't have enough money, you should go back to the arena and earn more!");
-            }
-
         }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "You did not enter a valid number! Please try again.");
+        }
+
+
+
     }
 
-    public static void itemsToBuy2(int itemsToBuy, int playerMoney, int secondItemRandomPrice, int secondItemRandomDamage, String[] differentItemCombinations)
+    public void itemsToBuy2(int itemsToBuy, int secondItemRandomPrice, int secondItemRandomDamage, String[] differentItemCombinations)
     {
-        if (itemsToBuy == 2) {
-            if (playerMoney > secondItemRandomPrice) {
+        if(itemsToBuy == 1 || itemsToBuy == 2 || itemsToBuy == 3 || itemsToBuy == 4 || itemsToBuy == 5) {
+            if (itemsToBuy == 2) {
+                if (thePlayer.getPlayerMoney() > secondItemRandomPrice) {
 
-                //this takes away the money required to buy the item.
-                playerMoney = playerMoney - secondItemRandomPrice;
+                    //this takes away the money required to buy the item.
+                    thePlayer.setPlayerMoney(thePlayer.getPlayerMoney() - secondItemRandomPrice);
 
-                //this adds the damage to the player stats
+                    thePlayer.setPlayerItem(differentItemCombinations[1]);
+                    //this actually changes the current text to whatever we have it set with .setPlayerItem
+                    itemLabelName.setText(thePlayer.getPlayerItem());
 
-                JOptionPane.showMessageDialog(null, "Congratulations, you just bought: " + differentItemCombinations[1]
-                        + "\nThe Item cost you: " + secondItemRandomPrice + " gold."
-                        + "\nYou get additional: " + secondItemRandomDamage + " Damage."
-                        + "\nYour current money status: " + playerMoney);
+                    //this sets the additional attack that the player gets
+                    thePlayer.setPlayerAttack((int) (Math.random() * ((5) + 2)) + secondItemRandomDamage);
+
+                    //this adds the damage to the player stats
+
+                    JOptionPane.showMessageDialog(null, "Congratulations, you just bought: " + differentItemCombinations[1]
+                            + "\nThe Item cost you: " + secondItemRandomPrice + " gold."
+                            + "\nYou get additional: " + secondItemRandomDamage + " Damage."
+
+                            + "\nYour current money status is: " + thePlayer.getPlayerMoney());
+
+
+                }
+                if (thePlayer.getPlayerMoney() < secondItemRandomPrice) {
+                    JOptionPane.showMessageDialog(null, "Sorry, but you don't have enough money, you should go back to the arena and earn more!");
+                }
 
             }
-            if (playerMoney < secondItemRandomPrice) {
-                JOptionPane.showMessageDialog(null, "Sorry, but you don't have enough money, you should go back to the arena and earn more!");
-            }
-
         }
+
     }
 
-    public static void itemsToBuy3(int itemsToBuy, int playerMoney, int thirdItemRandomPrice, int thirdItemRandomDamage, String[] differentItemCombinations)
+    public void itemsToBuy3(int itemsToBuy, int thirdItemRandomPrice, int thirdItemRandomDamage, String[] differentItemCombinations)
     {
-        if (itemsToBuy == 3) {
-            if (playerMoney > thirdItemRandomPrice) {
+        if(itemsToBuy == 1 || itemsToBuy == 2 || itemsToBuy == 3 || itemsToBuy == 4 || itemsToBuy == 5) {
+            if (itemsToBuy == 3) {
+                if (thePlayer.getPlayerMoney() > thirdItemRandomPrice) {
 
-                //this takes away the money required to buy the item.
-                playerMoney = playerMoney - thirdItemRandomPrice;
+                    //this takes away the money required to buy the item.
+                    thePlayer.setPlayerMoney(thePlayer.getPlayerMoney() - thirdItemRandomPrice);
 
-                //this adds the damage to the player stats
+                    thePlayer.setPlayerItem(differentItemCombinations[2]);
+                    //this actually changes the current text to whatever we have it set with .setPlayerItem
+                    itemLabelName.setText(thePlayer.getPlayerItem());
 
-                JOptionPane.showMessageDialog(null, "Congratulations, you just bought: " + differentItemCombinations[2]
-                        + "\nThe Item only cost you: " + thirdItemRandomPrice + " gold."
-                        + "\nYou get additional: " + thirdItemRandomDamage + " Damage."
-                        + "\nYour current money status: " + playerMoney);
+                    //this sets the additional attack that the player gets
+                    thePlayer.setPlayerAttack((int) (Math.random() * ((5) + 2)) + thirdItemRandomDamage);
 
+                    //this adds the damage to the player stats
+
+                    JOptionPane.showMessageDialog(null, "Congratulations, you just bought: " + differentItemCombinations[2]
+                            + "\nThe Item cost you: " + thirdItemRandomPrice + " gold."
+                            + "\nYou get additional: " + thirdItemRandomDamage + " Damage."
+
+                            + "\nYour current money status is: " + thePlayer.getPlayerMoney());
+
+
+                }
+                if (thePlayer.getPlayerMoney() < thirdItemRandomPrice) {
+                    JOptionPane.showMessageDialog(null, "Sorry, but you don't have enough money, you should go back to the arena and earn more!");
+                }
             }
-            if (playerMoney < thirdItemRandomPrice) {
-                JOptionPane.showMessageDialog(null, "Sorry, but you don't have enough money, you should go back to the arena and earn more!");
-            }
-
         }
+
     }
 
-    public static void itemsToBuy4(int itemsToBuy, int playerMoney, int fourthItemRandomPrice, int fourthItemRandomDamage, String[] differentItemCombinations)
+    public void itemsToBuy4(int itemsToBuy, int fourthItemRandomPrice, int fourthItemRandomDamage, String[] differentItemCombinations)
     {
-        if (itemsToBuy == 4) {
-            if (playerMoney > fourthItemRandomPrice) {
+        if(itemsToBuy == 1 || itemsToBuy == 2 || itemsToBuy == 3 || itemsToBuy == 4 || itemsToBuy == 5) {
+            if (itemsToBuy == 4) {
+                if (thePlayer.getPlayerMoney() > fourthItemRandomPrice) {
 
-                //this takes away the money required to buy the item.
-                playerMoney = playerMoney - fourthItemRandomPrice;
+                    //this takes away the money required to buy the item.
+                    thePlayer.setPlayerMoney(thePlayer.getPlayerMoney() - fourthItemRandomPrice);
 
-                //this adds the damage to the player stats
+                    thePlayer.setPlayerItem(differentItemCombinations[3]);
+                    //this actually changes the current text to whatever we have it set with .setPlayerItem
+                    itemLabelName.setText(thePlayer.getPlayerItem());
 
-                JOptionPane.showMessageDialog(null, "Congratulations, you just bought: " + differentItemCombinations[3]
-                        + "\nThe Item only cost you: " + fourthItemRandomPrice + " gold."
-                        + "\nYou get additional: " + fourthItemRandomDamage + " Damage."
-                        + "\nYour current money status: " + playerMoney);
 
+                    //this sets the additional attack that the player gets
+                    thePlayer.setPlayerAttack((int) (Math.random() * ((5) + 2)) + fourthItemRandomDamage);
+
+                    //this adds the damage to the player stats
+
+                    JOptionPane.showMessageDialog(null, "Congratulations, you just bought: " + differentItemCombinations[3]
+                            + "\nThe Item cost you: " + fourthItemRandomPrice + " gold."
+                            + "\nYou get additional: " + fourthItemRandomDamage + " Damage."
+
+                            + "\nYour current money status is: " + thePlayer.getPlayerMoney());
+
+
+                }
+                if (thePlayer.getPlayerMoney() < fourthItemRandomPrice) {
+                    JOptionPane.showMessageDialog(null, "Sorry, but you don't have enough money, you should go back to the arena and earn more!");
+                }
             }
-            if (playerMoney < fourthItemRandomPrice) {
-                JOptionPane.showMessageDialog(null, "Sorry, but you don't have enough money, you should go back to the arena and earn more!");
-            }
-
         }
+
     }
 
     public static void exitPhase(int itemsToBuy)
@@ -1298,9 +1291,26 @@ public class MyGuiTest extends JFrame{
     }
 
 
-    public void sellingItems()
+    public void sellingItems(int firstItemRandomPrice)
     {
 
+        String sellChoiceAsString = JOptionPane.showInputDialog(null, "Are you sure you want to sell your " + thePlayer.getPlayerItem() + " ?"
+                                                                    +"\nFor " + firstItemRandomPrice + " amounts of gold?"
+                                                                    +"\n1. Yes."
+                                                                    +"\n2. No.");
+        int sellChoiceAsInt = Integer.parseInt(sellChoiceAsString);
+
+        if(sellChoiceAsInt == 1)
+        {
+            itemLabelName.setText("Item sold");
+            JOptionPane.showMessageDialog(null,"You sold your " + thePlayer.getPlayerItem() + " for " + firstItemRandomPrice);
+            thePlayer.setPlayerMoney(thePlayer.playerMoney + firstItemRandomPrice);
+
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null,"Thanks for using the shop!");
+        }
     }
 
     //Fighting system
@@ -1308,10 +1318,76 @@ public class MyGuiTest extends JFrame{
     public void enterTheDuels()
     {
 
-    }
+        //on what scene is the user at.
+        position = "enterTheDuels";
 
-    public void checkThePrices()
-    {
+        enemyHealth = 100;
+
+        itemsEquipped();
+
+        //An array of different enemy weapons that he can attack with
+        String[] enemyWeapons = new String[5];
+        enemyWeapons[0] = "Fists";
+        enemyWeapons[1] = "Dagger";
+        enemyWeapons[2] = "Back of the sword";
+        enemyWeapons[3] = "Kicking attack";
+        enemyWeapons[4] = "Scissors";
+
+        String[] enemyTypes = new String[10];
+        enemyTypes[0] = "Human";
+        enemyTypes[1] = "Orc";
+        enemyTypes[2] = "Elf";
+        enemyTypes[3] = "Tree monster";
+        enemyTypes[4] = "Bilbo";
+        enemyTypes[5] = "Jimbo";
+        enemyTypes[6] = "Micky Mouse";
+        enemyTypes[7] = "Santa claus";
+        enemyTypes[8] = "Really scary monster";
+        enemyTypes[9] = "Tiny little rat";
+
+        //this gets a random number and sets it as enemy attack power.
+        enemyAttack = (int) (Math.random() * ((5) + 2));
+
+
+        itemsEquipped();
+
+        //this creates a random number for the array of enemy weapons which then chooses the weapon that
+        //the enemy has/attacks the player with depending on the number.
+        String enemyWeapon = enemyWeapons[(int)(Math.random() * ((4) + 1))];
+        String enemyType = enemyTypes[(int)(Math.random() * ((9) + 1))];
+
+
+
+        //this subtracts the enemy health depending on the number that we get in 'player attack'
+        enemyHealth = enemyHealth - thePlayer.getPlayerAttack();
+        thePlayer.setPlayerHP(thePlayer.playerHP - enemyAttack);
+
+        System.out.print("\nPlayer attack damage 2 :" + thePlayer.getPlayerAttack());
+        mainTextArea.setText("You attack the " + enemyType + " with: " + thePlayer.getPlayerItem() +
+                " and do: " + thePlayer.getPlayerAttack() + " damage."
+                +"\n " + enemyType + " current health: " + enemyHealth
+                +"\n\nThe " + enemyType + " attacks you with: " + enemyWeapon
+                +"\nAnd deals: " + enemyAttack + " damage.");
+
+        //this updates the player health.
+        hpLabelNumber.setText("" + thePlayer.getPlayerHP());
+
+        choice1.setText("Attack the " + enemyType);
+        choice2.setText("Run");
+        choice3.setText("------");
+        choice4.setText("------");
+
+        //if the enemy health is below or equal to 0 it calls guardKilled method
+        if(enemyHealth<=0)
+        {
+            duelEnemyKilled(firstItemRandomPrice);
+        }
+        ////if the player heal is below or equal to 0 it calls playerKilled method
+        else if(thePlayer.getPlayerHP()<=1)
+        {
+           playerKilled();
+        }
+
 
     }
 
@@ -1739,9 +1815,9 @@ public class MyGuiTest extends JFrame{
                     switch(yourChoice)
                     {
                         case "c1": buyingItems();break;
-                        case "c2": sellingItems();break;
-                        case "c3": checkThePrices();break;
-                        case "c4": enteringTheMarketScene();break;
+                        case "c2": sellingItems(firstItemRandomPrice);break;
+                        case "c3": enteringTheMarketScene();break;
+                        case "c4": break;
                     }
                     break;
                 case "billBoardDuels":
@@ -1762,6 +1838,17 @@ public class MyGuiTest extends JFrame{
                         case "c4": break;
                     }
                     break;
+                case "enterTheDuels":
+                    switch(yourChoice)
+                    {
+                        case "c1": enterTheDuels();break;
+                        case "c2": runFromAttack();break;
+                        case "c3": break;
+                        case "c4": break;
+                    }
+                    break;
+
+
 
             }
 

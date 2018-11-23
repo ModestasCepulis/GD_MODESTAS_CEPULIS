@@ -259,6 +259,11 @@ public class Scenes {
         choice3="------";
         choice4="------";
 
+        choice1="Go to the market";
+        choice2="Go to the billboard";
+        choice3="------";
+        choice4="------";
+
     }
 
     public void marketPlace()
@@ -268,8 +273,8 @@ public class Scenes {
 
         choice1="Buy items";
         choice2="Sell items";
-        choice3="Check the prices";
-        choice4="Go back to the town";
+        choice3="Go back to the town";
+        choice4="------";
 
     }
 
@@ -286,8 +291,13 @@ public class Scenes {
 
     }
 
-    public void buyingItems()
+    public void duelEnemyKilled()
     {
+        mainTextArea="Congratulations! You have defeated the enemy!";
 
+        choice1="Go back to the town";
+        choice2="Go back to the duel arena";
+        choice3="------";
+        choice4="------";
     }
 }
