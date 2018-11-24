@@ -10,6 +10,10 @@ import java.net.URL;
 import java.security.Key;
 import java.util.Random;
 
+/**
+ * This class creates the main GUI and the main game program.
+ */
+
 public class Game extends JFrame{
 
 
@@ -95,8 +99,12 @@ public class Game extends JFrame{
 
     boolean candleEquipped = false, keyAcquired = false, daggerEquipped=false; //sets the boolean values for different items.
 
+    static String playerUsername;
+
     public static void main(String[] args) {
 
+        creatingAFile();
+        readingAFile();
         //Instantiates different classes and launches the actual game
         thePlayer = new Player();
         theScenes = new Scenes();
@@ -104,12 +112,16 @@ public class Game extends JFrame{
     }
 
     public Game() {
+
         getContentPane().setBackground(Color.DARK_GRAY);//changes the gui background colour to dark gray
         mainGuiDesign();//launches the method which creates the gui
+
+
     }
 
     public void mainGuiDesign()
     {
+
         setResizable(false); //this sets that the screen size cannot be changed.
         setSize(1200, 800);//setts the size of the GUI
         //This sets the JFrame to be always in the middle regardless of the screen size
@@ -164,7 +176,27 @@ public class Game extends JFrame{
 
         //Sets the JFrame to visible.
         setVisible(true);
+    }
 
+    public static void creatingAFile()
+    {
+        //this reads the user input for the username and saves it in a file
+        //Reference taken from:
+        //https://www.youtube.com/watch?v=Bws9aQuAcdg
+        playerUsername = JOptionPane.showInputDialog("Please enter your characters username: ");
+        CreatingFile creatingFile = new CreatingFile();
+        creatingFile.openFile();
+        creatingFile.addRecords();
+        creatingFile.closeFile();
+    }
+
+    public static void readingAFile()
+    {
+        //this reads the string variable that the user wrote and puts into the market dialogue.
+        ReadingFile readingFile = new ReadingFile();
+        readingFile.openFile();
+        readingFile.readFile();
+        readingFile.closeFile();
     }
 
     public void playerSetup() {    //===================PLAYER SETUP=====================
@@ -1024,14 +1056,20 @@ public class Game extends JFrame{
         int fourthItemRandomDamage = (int) (Math.random() *((2) + 5) + 9);
 
         //this just shows the output.
+        try {
         itemsToBuyAsString = JOptionPane.showInputDialog("Your current money status is: " + thePlayer.getPlayerMoney() + "\n\nPlease choose what kind of items you would like to buy." +
                 "\n1. " + differentItemCombinations[0] + " Price(" + firstItemRandomPrice + ")" + " Damage(" + firstItemRandomDamage + ")" +
                 "\n2. " + differentItemCombinations[1] + " Price(" + secondItemRandomPrice + ")" + " Damage(" + secondItemRandomDamage + ")" +
                 "\n3. " + differentItemCombinations[2] + " Price(" + thirdItemRandomPrice + ")" + " Damage(" + thirdItemRandomDamage + ")" +
                 "\n4. " + differentItemCombinations[3] + " Price(" + fourthItemRandomPrice + ")" + " Damage(" + fourthItemRandomDamage + ")" +
-                "\n5. Buy an apple Price(15)"+
+                "\n5. Buy an apple Price(15)" +
                 "\n6. Exit.");
         itemsToBuy = Integer.parseInt(itemsToBuyAsString);
+    }
+        catch (Exception e)
+        {
+            JOptionPane.showMessageDialog(null,"Something went wrong, please try again...");
+        }
 
         //this calls the methods and puts the required values in
         Shop.itemsToBuy1(itemsToBuy, firstItemRandomPrice, firstItemRandomDamage, differentItemCombinations);
@@ -1042,29 +1080,6 @@ public class Game extends JFrame{
         Shop.buyingAnApple(itemsToBuy);
     }
 
-
-
-    public void sellingItems(int firstItemRandomPrice)
-    {
-
-        String sellChoiceAsString = JOptionPane.showInputDialog(null, "Are you sure you want to sell your " + thePlayer.getPlayerItem() + " ?"
-                +"\nFor " + firstItemRandomPrice + " amounts of gold?"
-                +"\n1. Yes."
-                +"\n2. No.");
-        int sellChoiceAsInt = Integer.parseInt(sellChoiceAsString);
-
-        if(sellChoiceAsInt == 1)
-        {
-            itemLabelName.setText("Item sold");
-            JOptionPane.showMessageDialog(null,"You sold your " + thePlayer.getPlayerItem() + " for " + firstItemRandomPrice + " amount of gold.");
-            thePlayer.setPlayerMoney(thePlayer.playerMoney + firstItemRandomPrice);
-
-        }
-        else
-        {
-            JOptionPane.showMessageDialog(null,"Thanks for using the shop!");
-        }
-    }
 
     //This method allows the player to eat the apple and regain health.
 
@@ -1575,7 +1590,7 @@ public class Game extends JFrame{
                     switch(yourChoice)
                     {
                         case "c1": buyingItems();break;
-                        case "c2": sellingItems(firstItemRandomPrice);break;
+                        case "c2": Shop.sellingItems(firstItemRandomPrice);break;
                         case "c3": enteringTheMarketScene();break;
                         case "c4": break;
                     }

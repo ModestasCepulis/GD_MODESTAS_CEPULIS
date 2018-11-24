@@ -1,5 +1,8 @@
 public class Player implements IPlayer  {
 
+    /**
+     * This class sets the default player attributes and implements the IPlayer interface
+     */
 
     int playerHP, playerMoney, playerAttack;
     String playerItem;
@@ -7,26 +10,14 @@ public class Player implements IPlayer  {
     public void setPlayerHP(int playerHP)
     {this.playerHP = playerHP;}
 
-   // public int getPlayerHP()
-    //{return playerHP;}
-
     public void setPlayerAttack(int playerAttack)
     {this.playerAttack = playerAttack;}
-
-   // public int getPlayerAttack()
-   // {return playerAttack;}
 
     public void setPlayerMoney(int playerMoney)
     {this.playerMoney = playerMoney;}
 
-   // public int getPlayerMoney()
-  //  {return playerMoney;}
-
     public void setPlayerItem(String playerItem)
     {this.playerItem = playerItem;}
-
-  //  public String getPlayerItem()
-   // {return playerItem;}
 
     public Player()
     {

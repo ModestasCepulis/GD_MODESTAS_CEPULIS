@@ -1,5 +1,9 @@
 import javax.swing.*;
 
+/**
+ * This class manages the scenes by putting different text (mainTextArea) and different choice text (choice1,2,3,4) for different scenes.
+ */
+
 public class Scenes {
 
     Player thePlayer = new Player();
@@ -273,8 +277,10 @@ public class Scenes {
 
     public void marketPlace()
     {
+
         mainTextArea="You started to walk to the market place, you can see different types of shops that sell different kind of stuff." +
-                "\nWhat would you like to do?";
+                "\nMarchant: You're suppoused to be: " + ReadingFile.playerUsernameString +
+                "\nWhat would you like to do?" ;
 
         choice1="Buy items";
         choice2="Sell items";
