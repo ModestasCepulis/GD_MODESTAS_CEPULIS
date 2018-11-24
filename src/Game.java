@@ -1,4 +1,4 @@
-//For JFrame reference I was looking at this video https://www.youtube.com/watch?v=RcvABhflOkI
+//For JFrame creating reference I was looking at this video https://www.youtube.com/watch?v=RcvABhflOkI
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,22 +13,27 @@ import java.util.Random;
 public class Game extends JFrame{
 
 
+    //Instantiates the classes
     static Player thePlayer;
     static Scenes theScenes;
 
     Container container;
 
+    //Creates Jpanels for the different panels that are needed for the GUI
     JPanel titleNamePanel, startButtonPanel, optionsButtonPanel, aboutTheGameButtonPanel,
             exitGameButtonPanel, mainTextPanel, choiceButtonPanel, playerPanel, exitConfirmationPanelYes, exitConfirmationPanelNo,
             changeTextColourPanel, changeBackgroundColourPanel, goBackPanel, ContinueButtonPanel, belowTextPanel;
 
+    //Mainly player setup labels
     JLabel titleNameLabel, hpLabel, hpLabelNumber, itemLabel;
     static JLabel itemLabelName;
 
+    //Creates JButtons that are needed for the GUI
     JButton startButton, optionsButton, aboutTheGameButton, exitGameButton,
             choice1, choice2, choice3, choice4, exitGameButtonYes, exitGameButtonNo, continueButton,
             changeTextColourButton, changeBackgroundColourButton, goBackButton;
 
+    //Main text areas used for the gui
     JTextArea mainTextArea, belowTextArea;
 
     //==========Cave image variables==========
@@ -57,20 +62,22 @@ public class Game extends JFrame{
     int thirdItemRandomPrice;
     int fourthItemRandomPrice;
 
-    marketContinueHandler marketContinueHdrl = new marketContinueHandler();
+    marketContinueHandler marketContinueHdrl = new marketContinueHandler();//Action handler for continue button
 
-    StartGameHandler startGameHdlr = new StartGameHandler();
-    OptionsHandler OptionsHdlr = new OptionsHandler();
-    AboutGameHandler aboutGameHdlr = new AboutGameHandler();
-    ChoiceHandler choiceHdlr = new ChoiceHandler();
-    ExitGameHandler exitGameHdlr = new ExitGameHandler();
-    ExitGameHandlerButtonYes exitGameButtonYesHdlr = new ExitGameHandlerButtonYes();
-    ExitGameHandlerButtonNo exitGameButtonNoHdlr = new ExitGameHandlerButtonNo();
-    changeTextColourHandler textColourHdrl = new changeTextColourHandler();
-    changeBackgroundColourHandler backgroundColourHdrl = new changeBackgroundColourHandler();
-    goBackHandler goBackHdlr = new goBackHandler();
-    goBackHandlerAboutGame goBackHdrlAboutGame = new goBackHandlerAboutGame();
-    continueButtonHandler continueButtonHdrl = new continueButtonHandler();
+    StartGameHandler startGameHdlr = new StartGameHandler();//Action handler for game starting button
+    OptionsHandler OptionsHdlr = new OptionsHandler(); //Action handler for options button
+    AboutGameHandler aboutGameHdlr = new AboutGameHandler(); //Action handler for about button
+    ChoiceHandler choiceHdlr = new ChoiceHandler(); //Action handler for choices
+    ExitGameHandler exitGameHdlr = new ExitGameHandler(); //Action handler for exit game button
+    ExitGameHandlerButtonYes exitGameButtonYesHdlr = new ExitGameHandlerButtonYes(); //Action handler for exit game>yes button
+    ExitGameHandlerButtonNo exitGameButtonNoHdlr = new ExitGameHandlerButtonNo(); //Action handler for exit game>no button
+    changeTextColourHandler textColourHdrl = new changeTextColourHandler(); //Action handler for text colour changer
+    changeBackgroundColourHandler backgroundColourHdrl = new changeBackgroundColourHandler(); //Action handler for background colour changer
+    goBackHandler goBackHdlr = new goBackHandler(); //Action handler for going back button in the options menu
+    goBackHandlerAboutGame goBackHdrlAboutGame = new goBackHandlerAboutGame(); //Action handler for going back button in the about section
+    continueButtonHandler continueButtonHdrl = new continueButtonHandler(); //Action handler for continue button in the images section
+
+    //Main fonts used for the gui texts
 
     Font titleFont = new Font("Times New Roman", Font.PLAIN, 80);
     Font mainFont = new Font("Times New Roman", Font.PLAIN, 30);
@@ -78,39 +85,41 @@ public class Game extends JFrame{
     Font optionsFont = new Font("Arial Black", Font.PLAIN, 30);
     Font exitFont = new Font("Arial", Font.PLAIN, 45);
 
-    int playerHP;
-    int textColourCount = 1, backgroundColourCount = 1;
-    int enemyHealth = 20;
-    int enemyAttack;
-    int candleAdditionalDamage, daggerAdditionalDamage;
 
-    String position;
+    int textColourCount = 1, backgroundColourCount = 1; //These are the counters that help to change colours
+    int enemyHealth = 20; //sets the enemy health
+    int enemyAttack; //makes a variable for enemyattack
+    int candleAdditionalDamage, daggerAdditionalDamage; //makes variables for additional attack added to different items
 
-    boolean candleEquipped = false, keyAcquired = false, daggerEquipped=false;
+    String position; // the position which the Choice handler use for different choices(different scenes)
 
+    boolean candleEquipped = false, keyAcquired = false, daggerEquipped=false; //sets the boolean values for different items.
 
     public static void main(String[] args) {
 
+        //Instantiates different classes and launches the actual game
         thePlayer = new Player();
         theScenes = new Scenes();
         new Game();
     }
 
-
     public Game() {
-        //this sets that the screen size cannot be changed.
-        setResizable(false);
+        getContentPane().setBackground(Color.DARK_GRAY);//changes the gui background colour to dark gray
+        mainGuiDesign();//launches the method which creates the gui
+    }
 
-        setSize(1200, 800);
+    public void mainGuiDesign()
+    {
+        setResizable(false); //this sets that the screen size cannot be changed.
+        setSize(1200, 800);//setts the size of the GUI
         //This sets the JFrame to be always in the middle regardless of the screen size
         //Code taken from:
         // https://stackoverflow.com/questions/2442599/how-to-set-jframe-to-appear-centered-regardless-of-monitor-resolution
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        getContentPane().setBackground(Color.DARK_GRAY);
-        setLayout(null);
-        container = getContentPane();
+        setLayout(null);//sets the layout to none
+        container = getContentPane(); //sets the container to get the content pane
 
         titleNamePanel = new JPanel();
         titleNamePanel.setBounds(100, 100, 1000, 150);
@@ -153,7 +162,6 @@ public class Game extends JFrame{
         container.add(aboutTheGameButtonPanel);
         container.add(exitGameButtonPanel);
 
-
         //Sets the JFrame to visible.
         setVisible(true);
 
@@ -170,7 +178,7 @@ public class Game extends JFrame{
     {
         candleAdditionalDamage=1;
         daggerAdditionalDamage=2;
-        //checks if the candle is equipped.
+        //checks if the items are equipped and adds the additional damage to the characters total damage
         if(candleEquipped)
         {
             thePlayer.setPlayerAttack(thePlayer.playerAttack + candleAdditionalDamage);
@@ -357,7 +365,7 @@ public class Game extends JFrame{
     //====================DIFFERENT SCENES==================
 
     public void firstScene() {
-        disableAllPanels();
+        disableSomePanels(); //disables some of the panels that it needs to disable to show the other panels
         mainTextPanel();
         mainTextArea();
 
@@ -365,7 +373,7 @@ public class Game extends JFrame{
         thePlayer.setPlayerItem("Fists");
 
         mainTextArea.setForeground(Color.white);
-        mainTextPanel.setBackground(Color.RED);
+        mainTextPanel.setBackground(Color.darkGray);
         mainTextPanel.setBounds(100,100,1000,200);
 
         choiceButtonPanel = new JPanel();
@@ -377,6 +385,7 @@ public class Game extends JFrame{
         choiceButtonPanel.setLayout(new GridLayout(4, 1));
         container.add(choiceButtonPanel);
 
+        //Creates the choice buttons
         choice1 = new JButton("Choice 1");
         choice1.setBackground(Color.darkGray);
         choice1.setForeground(Color.white);
@@ -444,7 +453,7 @@ public class Game extends JFrame{
 
     public void afterStartButtonScene() {
         setResizable(false);
-        disableAllPanels();
+        disableSomePanels();
         mainTextPanel();
         mainTextArea();
 
@@ -467,7 +476,7 @@ public class Game extends JFrame{
     }
 
     public void afterAboutGameButtonScene() {
-        disableAllPanels();
+        disableSomePanels();
         mainTextPanel();
         mainTextArea();
 
@@ -520,7 +529,7 @@ public class Game extends JFrame{
     }
 
     public void afterOptionsButtonScene() {
-        disableAllPanels();
+        disableSomePanels();
         mainTextPanel();
         mainTextArea();
 
@@ -566,7 +575,7 @@ public class Game extends JFrame{
     }
 
     public void afterExitButtonScene() {
-        disableAllPanels();
+        disableSomePanels();
         mainTextPanel();
         mainTextArea();
 
@@ -645,66 +654,14 @@ public class Game extends JFrame{
 
     public void mainMenuGUIChangedColors()
     {
-        setResizable(false); //this sets that the screen size cannot be changed.
-
-        setSize(1200, 800);
-        //This sets the JFrame to be always in the middle regardless of the screen size
-        //Code taken from:
-        // https://stackoverflow.com/questions/2442599/how-to-set-jframe-to-appear-centered-regardless-of-monitor-resolution
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation(dim.width / 2 - getSize().width / 2, dim.height / 2 - getSize().height / 2);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLayout(null);
-        container = getContentPane();
-
-        titleNamePanel = new JPanel();
-        titleNamePanel.setBounds(100, 100, 1000, 150);
-        titleNamePanel.setBackground(Color.darkGray);
-        titleNamePanel.setForeground(Color.white);
-
-        titleNameLabel = new JLabel("Begin your adventure");
-        titleNameLabel.setFont(titleFont);
-        titleNameLabel.setForeground(Color.white);
-
-        startButtonPanel();//===========CALLS PANEL METHODS============
-        optionsButtonPanel();
-        aboutTheGameButtonPanel();
-        exitGameButtonPanel();
-
-        startGameButton(); //===========CALLS BUTTON METHODS===========
-        optionsButton();
-        aboutTheGameButton();
-        exitGameButton();
-        exitGameButtonYes();
-        exitGameButtonNo();
-        continueButton();
-        changeBackgroundColourButton();
-        changeTextColourButton();
-
-        titleNamePanel.add(titleNameLabel);//This adds the labels and buttons to he panels
-        optionsButtonPanel.add(optionsButton);
-        startButtonPanel.add(startButton);
-        aboutTheGameButtonPanel.add(aboutTheGameButton);
-        exitGameButtonPanel.add(exitGameButton);
-
-        container.add(titleNamePanel); //This adds all the panels to the container, etc - the main Pane.
-        container.add(optionsButtonPanel);
-        container.add(startButtonPanel);
-        container.add(aboutTheGameButtonPanel);
-        container.add(exitGameButtonPanel);
-
-        setVisible(true);//Sets the JFrame to visible.
+       mainGuiDesign();
     }
 
     //=================GAME SCENES========================
     public void firstLaunchScene() {
         position = "firstScene";
-        mainTextArea.setText("As you opened your eyes, you realised that you are inside of some sort of a room? " +
-                "You can see a light coming out of one of the corners...");
-        choice1.setText("Look around");
-        choice2.setText("Go to the light");
-        choice3.setText("Shout for help");
-        choice4.setText("Try to fall asleep");
+        theScenes.firstLaunchScene();
+        updateScene();
 
         thePlayer.setPlayerHP(25);//sets the players and guards health back to its original state after the player dies
         thePlayer.setPlayerItem("Fists");
@@ -722,7 +679,7 @@ public class Game extends JFrame{
 
 
 
-    private void updateScene(){   //a method that updates all of the scenes
+    private void updateScene(){   //a method that updates all of the scenes by using 'Scenes' class
         mainTextArea.setText(theScenes.mainTextArea);
         choice1.setText(theScenes.choice1);
         choice2.setText(theScenes.choice2);
@@ -732,8 +689,8 @@ public class Game extends JFrame{
 
     public void goToTheCandle()
     {
-        position = "goToTheCandleScene";
-        theScenes.goToTheCandle();
+        position = "goToTheCandleScene"; //sets the position to a name which allows the choice handler to recognise it and act accordingly
+        theScenes.goToTheCandle(); // launches the method 'goToTheCandle' which sets the mainTextArea and choice.setText to different text.
         updateScene();
     }
 
@@ -804,7 +761,7 @@ public class Game extends JFrame{
     {
         position = "extinguishFire";
 
-        thePlayer.setPlayerHP(playerHP - 5);
+        thePlayer.setPlayerHP(thePlayer.playerHP - 5);
         hpLabelNumber.setText("" + thePlayer.getPlayerHP());
 
         theScenes.extinguishTheFire();
@@ -903,7 +860,7 @@ public class Game extends JFrame{
 
         thePlayer.setPlayerHP(thePlayer.playerHP = 25);
 
-        int ActualAmount = firstItemRandomPrice + 25;
+        int ActualAmount = firstItemRandomPrice + 125;
 
         theScenes.duelEnemyKilled();
         updateScene();
@@ -943,9 +900,8 @@ public class Game extends JFrame{
     {
         position = "eatTheApple";
 
-
         appleGivenHealth = 35;
-        thePlayer.setPlayerHP(thePlayer.playerHP += appleGivenHealth);
+        thePlayer.setPlayerHP(thePlayer.playerHP += appleGivenHealth); //adds 35 amount of health to the players total health
         hpLabelNumber.setText("" + thePlayer.getPlayerHP());
 
         theScenes.eatTheApple();
@@ -1024,8 +980,6 @@ public class Game extends JFrame{
 
         String itemsToBuyAsString;
 
-
-
         //This is an array of strings that has a word which will be connected with the second array
         String[] itemListFirstWord = new String[7];
         itemListFirstWord[0] = "Wooden ";
@@ -1046,10 +1000,8 @@ public class Game extends JFrame{
         itemListSecondWord[5] = "Longsword";
         itemListSecondWord[6] = "Axe";
 
-
         String firstWordOfItem = itemListFirstWord[(int) (Math.random() * ((6) + 1))];
         String secondWordOfItem = itemListSecondWord[(int) (Math.random() * ((6) + 1))];
-
 
         //its an array of different word combinations which make the name of the weapon.
         String[] differentItemCombinations = new String[4];
@@ -1070,8 +1022,6 @@ public class Game extends JFrame{
 
         fourthItemRandomPrice = (int) (Math.random() *((2) + 5) + 8);
         int fourthItemRandomDamage = (int) (Math.random() *((2) + 5) + 9);
-
-
 
         //this just shows the output.
         itemsToBuyAsString = JOptionPane.showInputDialog("Your current money status is: " + thePlayer.getPlayerMoney() + "\n\nPlease choose what kind of items you would like to buy." +
@@ -1116,7 +1066,7 @@ public class Game extends JFrame{
         }
     }
 
-    //Eating apple system
+    //This method allows the player to eat the apple and regain health.
 
     public void eatAnApple()
     {
@@ -1145,7 +1095,6 @@ public class Game extends JFrame{
 
     public void enterTheDuels()
     {
-
         //on what scene is the user at.
         position = "enterTheDuels";
 
@@ -1195,7 +1144,6 @@ public class Game extends JFrame{
             playerKilled();
         }
 
-
     }
 
     public void leavingTheTown()
@@ -1208,7 +1156,7 @@ public class Game extends JFrame{
 
     public void endingScene()
     {
-        if(thePlayer.getPlayerMoney() >= 5000) {
+        if(thePlayer.getPlayerMoney() >= 5000) { //if the player has 5000 gold the game finishes
             JOptionPane.showMessageDialog(null, "Congratulations! You have completed the game...");
             System.exit(0);
         }
@@ -1217,8 +1165,6 @@ public class Game extends JFrame{
         }
 
     }
-
-
 
     //==================DIFFERENT METHODS===================
 
@@ -1286,19 +1232,13 @@ public class Game extends JFrame{
         }
     }
 
-
-
-
     //==================BUTTON EVENT HANDLERS===============
 
     public class StartGameHandler implements ActionListener
     {
         public void actionPerformed(ActionEvent event)
         {
-            //testNewJFrameWindow();
             afterStartButtonScene();
-            //firstScene();
-
         }
     }
 
@@ -1315,7 +1255,6 @@ public class Game extends JFrame{
         public void actionPerformed(ActionEvent event)
         {
             afterAboutGameButtonScene();
-
         }
     }
 
@@ -1342,8 +1281,6 @@ public class Game extends JFrame{
             mainTextArea.setVisible(false);
 
             mainMenuGUIChangedColors();
-
-
         }
     }
 
@@ -1406,9 +1343,6 @@ public class Game extends JFrame{
             goBackPanel.setVisible(false);
 
             mainMenuGUIChangedColors();
-
-
-
         }
     }
 
@@ -1427,15 +1361,14 @@ public class Game extends JFrame{
         }
     }
 
-
     //==========CHOICE HANDLER========================
+    //The choice handler is responsible of every choice that the player makes.
     public class ChoiceHandler implements ActionListener
     {
         public void actionPerformed(ActionEvent event)
         {
             //This takes the named reference from the buttons
             String yourChoice = event.getActionCommand();
-
             switch(position)
             {
                 case "firstScene":
@@ -1572,7 +1505,7 @@ public class Game extends JFrame{
                         case "c1": searchTheGuard();break;
                         case "c2": goMetalDoor();break;
                         case "c3": break;
-                        case "c4": ;break;
+                        case "c4": break;
                     }
                     break;
                 case "playerKilled":
@@ -1581,7 +1514,7 @@ public class Game extends JFrame{
                         case "c1": firstLaunchScene();break;
                         case "c2": break;
                         case "c3": break;
-                        case "c4": ;break;
+                        case "c4": break;
                     }
                     break;
                 case "searchTheGuard":
@@ -1701,19 +1634,13 @@ public class Game extends JFrame{
                         case "c4": break;
                     }
                     break;
-
-
-
-
             }
-
         }
     }
 
+    //================This disables some of the active panels===============
 
-    //================This disables all of the active panels===============
-
-    public void disableAllPanels()
+    public void disableSomePanels()
     {
         titleNamePanel.setVisible(false);
         optionsButtonPanel.setVisible(false);
@@ -1724,13 +1651,4 @@ public class Game extends JFrame{
 
 }
 
-//
-//getContentPane is like a container that can store things
-//setBounts sets the position of the panel.
-
-//This adds the keylistener to the guy.
-//KeyListener taken from:
-//https://www.youtube.com/watch?v=PbmQrkwR9Ko
-//keyText.addKeyListener(this);
-// add(keyText);
 
