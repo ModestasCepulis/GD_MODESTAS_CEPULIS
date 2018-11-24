@@ -14,6 +14,17 @@ public class Scenes {
 
     }
 
+    public void firstLaunchScene()
+    {
+        mainTextArea = "As you opened your eyes, you realised that you are inside of some sort of a room?" +
+                       "\nYou can see a light coming out of one of the corners...";
+
+        choice1 = "Look around";
+        choice2 = "Go to the light";
+        choice3 = "Shout for help";
+        choice4 = "Try to fall asleep";
+    }
+
     public void lookAround()
     {
         mainTextArea = "You lift your head and look around the room, there is no much light, but you can see " +
@@ -299,7 +310,7 @@ public class Scenes {
     {
         mainTextArea="So you decided to leave this town already? You can, but you will need a lot of money to do that...";
 
-        choice1="Leave the town (5,000 gold|)";
+        choice1="Leave the town (5,000 gold)";
         choice2="Go back to town";
         choice3="------";
         choice4="------";

@@ -1,4 +1,4 @@
-public class Player {
+public class Player implements IPlayer  {
 
 
     int playerHP, playerMoney, playerAttack;
@@ -7,26 +7,26 @@ public class Player {
     public void setPlayerHP(int playerHP)
     {this.playerHP = playerHP;}
 
-    public int getPlayerHP()
-    {return playerHP;}
+   // public int getPlayerHP()
+    //{return playerHP;}
 
     public void setPlayerAttack(int playerAttack)
     {this.playerAttack = playerAttack;}
 
-    public int getPlayerAttack()
-    {return playerAttack;}
+   // public int getPlayerAttack()
+   // {return playerAttack;}
 
     public void setPlayerMoney(int playerMoney)
     {this.playerMoney = playerMoney;}
 
-    public int getPlayerMoney()
-    {return playerMoney;}
+   // public int getPlayerMoney()
+  //  {return playerMoney;}
 
     public void setPlayerItem(String playerItem)
     {this.playerItem = playerItem;}
 
-    public String getPlayerItem()
-    {return playerItem;}
+  //  public String getPlayerItem()
+   // {return playerItem;}
 
     public Player()
     {
@@ -45,9 +45,23 @@ public class Player {
     }
 
 
+    @Override
+    public String getPlayerItem() {
+        return playerItem;
+    }
 
+    @Override
+    public int getPlayerHP() {
+        return playerHP;
+    }
 
+    @Override
+    public int getPlayerMoney() {
+        return playerMoney;
+    }
 
-
-
+    @Override
+    public int getPlayerAttack() {
+        return playerAttack;
+    }
 }
