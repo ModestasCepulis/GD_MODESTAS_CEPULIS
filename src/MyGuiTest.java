@@ -48,6 +48,7 @@ public class MyGuiTest extends JFrame{
 
     //=========Health items============
     int appleGivenHealth;
+    int appleItemCount=1;
 
     //=========shop==================
 
@@ -172,8 +173,8 @@ public class MyGuiTest extends JFrame{
 
     public void itemsEquipped()
     {
-        candleAdditionalDamage=3;
-        daggerAdditionalDamage=6;
+        candleAdditionalDamage=1;
+        daggerAdditionalDamage=2;
 
         //checks if the candle is equipped.
         if(candleEquipped)
@@ -743,9 +744,9 @@ public class MyGuiTest extends JFrame{
         choice4.setText("Try to fall asleep");
 
        //sets the players and guards health back to its original state after the player dies
-        playerHP = 25;
+        thePlayer.setPlayerHP(25);
         enemyHealth = 20;
-        hpLabelNumber.setText("" + playerHP);
+        hpLabelNumber.setText("" + thePlayer.playerHP);
     }
 
     public void lookAround() {
@@ -876,7 +877,6 @@ public class MyGuiTest extends JFrame{
         //this gets a random number and sets it as enemy attack power.
         enemyAttack = (int) (Math.random() * ((5) + 2));
 
-        itemsEquipped();
 
         //this creates a random number for the array of guards weapons which then chooses the weapon that
         //the guards has/attacks the player with depending on the number.
@@ -910,7 +910,7 @@ public class MyGuiTest extends JFrame{
             guardKilled();
         }
         //if the player heal is below or equal to 0 it calls playerKilled method
-        else if(thePlayer.getPlayerHP()<=1)
+        else if(thePlayer.getPlayerHP()<=3)
         {
             playerKilled();
         }
@@ -940,11 +940,13 @@ public class MyGuiTest extends JFrame{
 
         thePlayer.setPlayerHP(thePlayer.playerHP = 25);
 
+        int ActualAmount = firstItemRandomPrice + 25;
+
         theScenes.duelEnemyKilled();
         updateScene();
 
-        JOptionPane.showMessageDialog(null,"You have received " + firstItemRandomPrice + " gold!");
-        thePlayer.setPlayerMoney(thePlayer.playerMoney + firstItemRandomPrice);
+        JOptionPane.showMessageDialog(null,"You have received " + ActualAmount + " gold!");
+        thePlayer.setPlayerMoney(thePlayer.playerMoney + ActualAmount);
     }
 
     public void searchTheGuard()
@@ -960,8 +962,6 @@ public class MyGuiTest extends JFrame{
     public void goMetalDoor()
     {
         position = "goMetalDoor";
-
-        itemsEquipped();
 
         if(keyAcquired)
         {
@@ -997,6 +997,7 @@ public class MyGuiTest extends JFrame{
 
         candleEquipped = false;
         daggerEquipped = true;
+
         itemsEquipped();
 
         theScenes.equipDagger();
@@ -1007,7 +1008,6 @@ public class MyGuiTest extends JFrame{
     public void ContinueMetalDoor()
     {
         position = "enteringTown";
-        itemsEquipped();
 
         theScenes.ContinueMetalDoor();
         updateScene();
@@ -1048,6 +1048,8 @@ public class MyGuiTest extends JFrame{
     public void billBoardDuels()
     {
         position = "billBoardDuels";
+
+        enemyHealth = 100;
 
         theScenes.billBoardDuels();
         updateScene();
@@ -1110,12 +1112,13 @@ public class MyGuiTest extends JFrame{
 
 
         //this just shows the output.
-        itemsToBuyAsString = JOptionPane.showInputDialog("\nPlease choose what kind of items you would like to buy." +
+        itemsToBuyAsString = JOptionPane.showInputDialog("Your current money status is: " + thePlayer.getPlayerMoney() + "\n\nPlease choose what kind of items you would like to buy." +
                 "\n1. " + differentItemCombinations[0] + " Price(" + firstItemRandomPrice + ")" + " Damage(" + firstItemRandomDamage + ")" +
                 "\n2. " + differentItemCombinations[1] + " Price(" + secondItemRandomPrice + ")" + " Damage(" + secondItemRandomDamage + ")" +
                 "\n3. " + differentItemCombinations[2] + " Price(" + thirdItemRandomPrice + ")" + " Damage(" + thirdItemRandomDamage + ")" +
                 "\n4. " + differentItemCombinations[3] + " Price(" + fourthItemRandomPrice + ")" + " Damage(" + fourthItemRandomDamage + ")" +
-                "\n5. Exit");
+                "\n5. Buy an apple Price(15)"+
+                "\n6. Exit.");
         itemsToBuy = Integer.parseInt(itemsToBuyAsString);
 
         //this calls the methods and puts the required values in
@@ -1124,6 +1127,7 @@ public class MyGuiTest extends JFrame{
         itemsToBuy3(itemsToBuy, thirdItemRandomPrice, thirdItemRandomDamage, differentItemCombinations);
         itemsToBuy4(itemsToBuy, fourthItemRandomPrice, fourthItemRandomDamage, differentItemCombinations);
         exitPhase(itemsToBuy);
+        buyingAnApple(itemsToBuy);
     }
 
 
@@ -1136,7 +1140,7 @@ public class MyGuiTest extends JFrame{
     public void itemsToBuy1(int itemsToBuy, int firstItemRandomPrice, int firstItemRandomDamage, String[] differentItemCombinations)
     {
 
-        if(itemsToBuy == 1 || itemsToBuy == 2 || itemsToBuy == 3 || itemsToBuy == 4 || itemsToBuy == 5)
+        if(itemsToBuy == 1 || itemsToBuy == 2 || itemsToBuy == 3 || itemsToBuy == 4 || itemsToBuy == 5 || itemsToBuy == 6)
         {
             if (itemsToBuy == 1) {
                 if (thePlayer.getPlayerMoney()> firstItemRandomPrice) {
@@ -1281,13 +1285,28 @@ public class MyGuiTest extends JFrame{
 
     }
 
-    public static void exitPhase(int itemsToBuy)
+    public void exitPhase(int itemsToBuy)
     {
-        if(itemsToBuy == 5)
+        if(itemsToBuy == 6)
         {
             JOptionPane.showMessageDialog(null,"Thank you for using the market traveler. Bye now.");
         }
 
+    }
+
+    public void buyingAnApple(int itemsToBuy)
+    {
+        if(itemsToBuy == 5)
+        {
+            if(thePlayer.getPlayerMoney() > 15) {
+                thePlayer.setPlayerMoney(thePlayer.getPlayerMoney() - 15);
+                JOptionPane.showMessageDialog(null, "You just bought an apple! You have total of " + appleItemCount + " apples.");
+                appleItemCount++;
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "Sorry, but you don't have enough money, you should go back to the arena and earn more!");
+            }
+        }
     }
 
 
@@ -1303,13 +1322,37 @@ public class MyGuiTest extends JFrame{
         if(sellChoiceAsInt == 1)
         {
             itemLabelName.setText("Item sold");
-            JOptionPane.showMessageDialog(null,"You sold your " + thePlayer.getPlayerItem() + " for " + firstItemRandomPrice);
+            JOptionPane.showMessageDialog(null,"You sold your " + thePlayer.getPlayerItem() + " for " + firstItemRandomPrice + " amount of gold.");
             thePlayer.setPlayerMoney(thePlayer.playerMoney + firstItemRandomPrice);
 
         }
         else
         {
             JOptionPane.showMessageDialog(null,"Thanks for using the shop!");
+        }
+    }
+
+    //Eating apple system
+
+    public void eatAnApple()
+    {
+        if(appleItemCount>0)
+        {
+            if(thePlayer.playerHP>=100)
+            {
+                JOptionPane.showMessageDialog(null,"It seems that you have more than 100 health!" +
+                                                                            "\nLower your health in order to eat apples.");
+            }
+            else {
+                appleItemCount -= 1;
+                JOptionPane.showMessageDialog(null, "You have just ate an apple, you received some health.");
+                thePlayer.setPlayerHP(thePlayer.playerHP += appleGivenHealth);
+                hpLabelNumber.setText("" + thePlayer.getPlayerHP());
+            }
+        }
+        else if(appleItemCount<=0)
+        {
+            JOptionPane.showMessageDialog(null,"It seems that you don't have any apples, buy them at the market.");
         }
     }
 
@@ -1321,10 +1364,6 @@ public class MyGuiTest extends JFrame{
         //on what scene is the user at.
         position = "enterTheDuels";
 
-        enemyHealth = 100;
-
-        itemsEquipped();
-
         //An array of different enemy weapons that he can attack with
         String[] enemyWeapons = new String[5];
         enemyWeapons[0] = "Fists";
@@ -1333,49 +1372,34 @@ public class MyGuiTest extends JFrame{
         enemyWeapons[3] = "Kicking attack";
         enemyWeapons[4] = "Scissors";
 
-        String[] enemyTypes = new String[10];
-        enemyTypes[0] = "Human";
-        enemyTypes[1] = "Orc";
-        enemyTypes[2] = "Elf";
-        enemyTypes[3] = "Tree monster";
-        enemyTypes[4] = "Bilbo";
-        enemyTypes[5] = "Jimbo";
-        enemyTypes[6] = "Micky Mouse";
-        enemyTypes[7] = "Santa claus";
-        enemyTypes[8] = "Really scary monster";
-        enemyTypes[9] = "Tiny little rat";
-
         //this gets a random number and sets it as enemy attack power.
-        enemyAttack = (int) (Math.random() * ((5) + 2));
-
-
-        itemsEquipped();
+        enemyAttack = (int) (Math.random() * ((15) + 5));
+        int playerAttack = (int) (Math.random() * (5) + 2) + thePlayer.getPlayerAttack();
 
         //this creates a random number for the array of enemy weapons which then chooses the weapon that
         //the enemy has/attacks the player with depending on the number.
         String enemyWeapon = enemyWeapons[(int)(Math.random() * ((4) + 1))];
-        String enemyType = enemyTypes[(int)(Math.random() * ((9) + 1))];
-
-
 
         //this subtracts the enemy health depending on the number that we get in 'player attack'
-        enemyHealth = enemyHealth - thePlayer.getPlayerAttack();
+        JOptionPane.showMessageDialog(null,"The enemy health is " + enemyHealth);
+        enemyHealth = enemyHealth - playerAttack;
         thePlayer.setPlayerHP(thePlayer.playerHP - enemyAttack);
 
-        System.out.print("\nPlayer attack damage 2 :" + thePlayer.getPlayerAttack());
-        mainTextArea.setText("You attack the " + enemyType + " with: " + thePlayer.getPlayerItem() +
-                " and do: " + thePlayer.getPlayerAttack() + " damage."
-                +"\n " + enemyType + " current health: " + enemyHealth
-                +"\n\nThe " + enemyType + " attacks you with: " + enemyWeapon
+        System.out.print("\nPlayer attack damage 2 :" + playerAttack );
+        mainTextArea.setText("You attack the duelist with: " + thePlayer.getPlayerItem() +
+                " and do: " + playerAttack + " damage."
+                +"\n duelists current health: " + enemyHealth
+                +"\n\nThe duelist attacks you with: " + enemyWeapon
                 +"\nAnd deals: " + enemyAttack + " damage.");
 
         //this updates the player health.
         hpLabelNumber.setText("" + thePlayer.getPlayerHP());
 
-        choice1.setText("Attack the " + enemyType);
+        choice1.setText("Attack the duelist");
         choice2.setText("Run");
-        choice3.setText("------");
+        choice3.setText("Eat an apple");
         choice4.setText("------");
+
 
         //if the enemy health is below or equal to 0 it calls guardKilled method
         if(enemyHealth<=0)
@@ -1388,6 +1412,26 @@ public class MyGuiTest extends JFrame{
            playerKilled();
         }
 
+
+    }
+
+    public void leavingTheTown()
+    {
+        position = "leavingTheTown";
+
+        theScenes.leavingTheTown();
+        updateScene();
+    }
+
+    public void endingScene()
+    {
+        if(thePlayer.getPlayerMoney() >= 5000) {
+            JOptionPane.showMessageDialog(null, "Congratulations! You have completed the game...");
+            System.exit(0);
+        }
+        else {
+            JOptionPane.showMessageDialog(null,"Sorry, but it seems that you don't have the required amount of gold to leave the town...");
+        }
 
     }
 
@@ -1673,7 +1717,7 @@ public class MyGuiTest extends JFrame{
                         case "c1": lookAround();break;
                         case "c2": goToTheLight();break;
                         case "c3": shoutForHelp();break;
-                        case "c4": ;break;
+                        case "c4": break;
                     }
                     break;
                 case "goToTheWall":
@@ -1691,7 +1735,7 @@ public class MyGuiTest extends JFrame{
                         case "c1": break;
                         case "c2": goToTheWall();break;
                         case "c3": openTheDoor();break;
-                        case "c4": ;break;
+                        case "c4": break;
                     }
                     break;
                 case "extinguishFire":
@@ -1736,7 +1780,7 @@ public class MyGuiTest extends JFrame{
                         case "c1": attackTheGuard();break;
                         case "c2": break;
                         case "c3": break;
-                        case "c4": ;break;
+                        case "c4": break;
                     }
                     break;
                 case "guardKilled":
@@ -1807,7 +1851,7 @@ public class MyGuiTest extends JFrame{
                     {
                         case "c1": marketPlace();break;
                         case "c2": billBoardDuels();break;
-                        case "c3": break;
+                        case "c3": leavingTheTown();break;
                         case "c4": break;
                     }
                     break;
@@ -1843,10 +1887,38 @@ public class MyGuiTest extends JFrame{
                     {
                         case "c1": enterTheDuels();break;
                         case "c2": runFromAttack();break;
+                        case "c3": eatAnApple();break;
+                        case "c4": break;
+                    }
+                    break;
+                case "runFromAttack":
+                    switch(yourChoice)
+                    {
+                        case "c1": enteringTheMarketScene();break;
+                        case "c2": break;
                         case "c3": break;
                         case "c4": break;
                     }
                     break;
+                case "duelEnemyKilled":
+                    switch(yourChoice)
+                    {
+                        case "c1": enteringTheMarketScene();break;
+                        case "c2": break;
+                        case "c3": break;
+                        case "c4": break;
+                    }
+                    break;
+                case "leavingTheTown":
+                    switch(yourChoice)
+                    {
+                        case "c1": endingScene();break;
+                        case "c2": enteringTheMarketScene();break;
+                        case "c3": break;
+                        case "c4": break;
+                    }
+                    break;
+
 
 
 

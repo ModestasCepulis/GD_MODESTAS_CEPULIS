@@ -128,7 +128,7 @@ public class Scenes {
     public void enterTheDoor()
     {
         mainTextArea = "You enter the room, this room is even smaller than the one you came from," +
-                " you can see various objects around you, from table with chairs, fireplace, big wooden door, " +
+                " you can see various objects around you, from table with chairs, fireplace, big metal door, " +
                 "and? what? you can't believe your eyes... Who is that?" +
                 "\n\nGuard: You shouldn't suppouse to be here! Now you will have to pay.";
 
@@ -200,8 +200,7 @@ public class Scenes {
     public void eatTheApple()
     {
         mainTextArea="You check the guards body and find an apple, maybe its still good, who knows, " +
-                " but you eat it anyway. It is not much, but still better than nothing. " +
-                "\n(+25 HEALTH)";
+                " but you eat it anyway. It is not much, but still better than nothing. ";
 
         choice1="Go to the metal door";
         choice2="------";
@@ -213,8 +212,7 @@ public class Scenes {
     {
 
         mainTextArea="You check the guards body and find a dagger, it doesn't look sharp, but it is better than fighting with." +
-                " So you decide to throw away your weapon and equip the new one. " +
-                "\n(+6 DAMAGE)";
+                " So you decide to throw away your weapon and equip the new one. ";
 
 
         choice1="Go to the metal door";
@@ -239,29 +237,25 @@ public class Scenes {
 
     public void runFromAttack()
     {
-        mainTextArea="You cannot run";
+        mainTextArea="You have managed to escape the fight...";
 
-        choice1="Go to the metal door";
-        choice2="Eat the apple";
-        choice3="Equip the dagger";
+        choice1="Go back to the town";
+        choice2="------";
+        choice3="------";
         choice4="------";
     }
 
     public void enteringTheMarketScene()
     {
         mainTextArea="Finally, you've managed to escape that dirty place... " +
-                "\nAs you look around, you realise that there is 2 paths that you can take." +
+                "\nAs you look around, you realise that there is 3 paths that you can take." +
                 "\nOne of the path is leading to the market" +
-                "\nWhile other path is leading to the billboard.";
+                "\nSecond path is leading to the billboard." +
+                "\nThird path is leaving to a boats.";
 
         choice1="Go to the market";
         choice2="Go to the billboard";
-        choice3="------";
-        choice4="------";
-
-        choice1="Go to the market";
-        choice2="Go to the billboard";
-        choice3="------";
+        choice3="Go to the boats";
         choice4="------";
 
     }
@@ -296,8 +290,19 @@ public class Scenes {
         mainTextArea="Congratulations! You have defeated the enemy!";
 
         choice1="Go back to the town";
-        choice2="Go back to the duel arena";
+        choice2="------";
         choice3="------";
         choice4="------";
     }
+
+    public void leavingTheTown()
+    {
+        mainTextArea="So you decided to leave this town already? You can, but you will need a lot of money to do that...";
+
+        choice1="Leave the town (5,000 gold|)";
+        choice2="Go back to town";
+        choice3="------";
+        choice4="------";
+    }
+
 }
